@@ -83,3 +83,5 @@ Create your admin user in Firebase first, then set `ADMIN_FIREBASE_UID` in `.env
 ## Team
 
 Rajan Kshedal (Backend) · NCIT, Pokhara University
+Sanchita 
+Anisha
