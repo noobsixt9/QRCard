@@ -48,7 +48,6 @@ npm run dev
 ```
 
 API: `http://localhost:5001`  
-OpenAPI JSON (Postman import): `http://localhost:5001/openapi.json`  
 Health check: `http://localhost:5001/health`
 
 > **macOS note:** Port 5000 is often used by AirPlay Receiver. This project defaults to **5001** to avoid conflicts.
@@ -74,7 +73,6 @@ Create your admin user in Firebase first, then set `ADMIN_FIREBASE_UID` in `.env
 |-------------------|--------------------|
 | `npm run dev`     | Start with nodemon |
 | `npm start`       | Production start   |
-| `npm test`        | Run Jest tests     |
 | `npm run db:studio` | Prisma Studio    |
 
 ## Storage

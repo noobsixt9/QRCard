@@ -153,7 +153,6 @@ When you run `npm run dev`, Node executes `server.js`, which starts an HTTP serv
 | `npm install` | Install all dependencies into `node_modules/` |
 | `npm run dev` | Start server with **nodemon** (auto-restart on file change) |
 | `npm start` | Start server with plain `node` (production) |
-| `npm test` | Run Jest tests |
 | `npx prisma migrate dev` | Apply database migrations |
 | `npx prisma db seed` | Run seed script (creates admin user) |
 | `npx prisma studio` | Visual database browser |
@@ -161,7 +160,7 @@ When you run `npm run dev`, Node executes `server.js`, which starts an HTTP serv
 ### Dependencies vs devDependencies
 
 - **dependencies:** Needed at runtime (express, prisma, bcrypt)
-- **devDependencies:** Only for development (jest, nodemon, eslint)
+- **devDependencies:** Only for development (nodemon, eslint, prisma CLI)
 
 ---
 
@@ -182,11 +181,6 @@ Backend/
 │
 ├── uploads/
 │   └── avatars/                ← Local avatar fallback storage
-│
-├── tests/
-│   ├── auth.test.js
-│   ├── utils.test.js
-│   └── uuid.test.js
 │
 └── src/
     ├── app.js                  ← Express app setup (middleware + routes)
@@ -385,8 +379,6 @@ Access anywhere: `process.env.JWT_SECRET`
 | Package | Purpose |
 |---------|---------|
 | **nodemon** | Auto-restart server on file save |
-| **jest** | Test runner |
-| **supertest** | HTTP assertions in tests |
 | **eslint** | Code linting |
 
 ---
