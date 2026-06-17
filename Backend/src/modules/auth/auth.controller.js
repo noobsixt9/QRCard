@@ -1,5 +1,56 @@
 const authService = require('./auth.service')
 
+async function register(req, res, next) {
+  try {
+    const result = await authService.register(req.body)
+    res.status(201).json({
+      success: true,
+      message: 'Account created successfully',
+      data: result,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function login(req, res, next) {
+  try {
+    const result = await authService.login(req.body)
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      data: result,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function forgotPassword(req, res, next) {
+  try {
+    const result = await authService.forgotPassword(req.body.email)
+    res.status(200).json({
+      success: true,
+      message: 'If the email exists, a reset token has been generated',
+      data: result,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function resetPassword(req, res, next) {
+  try {
+    await authService.resetPassword(req.body.token, req.body.password)
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successful',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 async function sync(req, res, next) {
   try {
     if (req.user) {
@@ -39,4 +90,4 @@ async function me(req, res, next) {
   }
 }
 
-module.exports = { sync, me }
+module.exports = { register, login, forgotPassword, resetPassword, sync, me }

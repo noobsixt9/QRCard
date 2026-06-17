@@ -1,5 +1,8 @@
 const prisma = require('../../config/db')
+const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 const { sanitizeUser, slugify } = require('../../utils/user')
+const { signToken } = require('../../utils/jwt')
 
 async function generateUniqueUsername(baseName) {
   let base = slugify(baseName) || 'user'
@@ -39,9 +42,17 @@ async function syncUser(firebase, { username }) {
 
   const emailTaken = await prisma.user.findUnique({ where: { email } })
   if (emailTaken) {
-    const err = new Error('An account with this email already exists')
-    err.status = 409
-    throw err
+    if (emailTaken.firebase_uid && emailTaken.firebase_uid !== uid) {
+      const err = new Error('This email is already linked with another social account')
+      err.status = 409
+      throw err
+    }
+
+    const linked = await prisma.user.update({
+      where: { id: emailTaken.id },
+      data: { firebase_uid: uid },
+    })
+    return { user: sanitizeUser(linked), is_new: false, linked: true }
   }
 
   const usernameTaken = await prisma.user.findUnique({ where: { username } })
@@ -69,6 +80,111 @@ async function syncUser(firebase, { username }) {
   return { user: sanitizeUser(user), is_new: true }
 }
 
+async function register({ email, username, password }) {
+  const existingEmail = await prisma.user.findUnique({ where: { email } })
+  if (existingEmail) {
+    const err = new Error('Email already taken')
+    err.status = 409
+    throw err
+  }
+
+  const existingUsername = await prisma.user.findUnique({ where: { username } })
+  if (existingUsername) {
+    const err = new Error('Username already taken')
+    err.status = 409
+    throw err
+  }
+
+  const password_hash = await bcrypt.hash(password, 12)
+
+  const user = await prisma.user.create({
+    data: {
+      email,
+      username,
+      password_hash,
+      role: 'USER',
+      profile: { create: {} },
+    },
+  })
+
+  const token = signToken(user)
+  return { token, user: sanitizeUser(user) }
+}
+
+async function login({ email, password }) {
+  const user = await prisma.user.findUnique({ where: { email } })
+
+  if (!user) {
+    const err = new Error('Invalid email or password')
+    err.status = 401
+    throw err
+  }
+
+  if (!user.password_hash) {
+    const err = new Error('This account uses social sign-in. Continue with Firebase OAuth.')
+    err.status = 400
+    throw err
+  }
+
+  if (!user.is_active) {
+    const err = new Error('Account has been deactivated')
+    err.status = 403
+    throw err
+  }
+
+  const valid = await bcrypt.compare(password, user.password_hash)
+  if (!valid) {
+    const err = new Error('Invalid email or password')
+    err.status = 401
+    throw err
+  }
+
+  const token = signToken(user)
+  return { token, user: sanitizeUser(user) }
+}
+
+async function forgotPassword(email) {
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user) {
+    return { reset_token: null }
+  }
+
+  const token = crypto.randomBytes(24).toString('hex')
+  const expires = new Date(Date.now() + 1000 * 60 * 30)
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { reset_token: token, reset_expires: expires },
+  })
+
+  return { reset_token: token, expires_at: expires.toISOString() }
+}
+
+async function resetPassword(token, password) {
+  const user = await prisma.user.findFirst({
+    where: {
+      reset_token: token,
+      reset_expires: { gt: new Date() },
+    },
+  })
+
+  if (!user) {
+    const err = new Error('Invalid or expired reset token')
+    err.status = 400
+    throw err
+  }
+
+  const password_hash = await bcrypt.hash(password, 12)
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      password_hash,
+      reset_token: null,
+      reset_expires: null,
+    },
+  })
+}
+
 async function getMe(userId) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -90,4 +206,12 @@ async function getMe(userId) {
   return sanitizeUser(user)
 }
 
-module.exports = { syncUser, getMe, generateUniqueUsername }
+module.exports = {
+  register,
+  login,
+  forgotPassword,
+  resetPassword,
+  syncUser,
+  getMe,
+  generateUniqueUsername,
+}
