@@ -83,7 +83,7 @@ async function getUserDetail(userId) {
     throw err
   }
 
-  const { password_hash, google_id, ...safeUser } = user
+  const { firebase_uid, ...safeUser } = user
   return safeUser
 }
 

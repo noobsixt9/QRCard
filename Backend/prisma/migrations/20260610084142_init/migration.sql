@@ -9,11 +9,10 @@ CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELL
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" TEXT NOT NULL,
     "username" TEXT NOT NULL,
-    "password_hash" TEXT,
-    "google_id" TEXT,
+    "firebase_uid" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -24,8 +23,8 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Profile" (
-    "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
     "full_name" TEXT,
     "job_title" TEXT,
     "company" TEXT,
@@ -45,8 +44,8 @@ CREATE TABLE "Profile" (
 
 -- CreateTable
 CREATE TABLE "QRCode" (
-    "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
     "type" "QRType" NOT NULL,
     "qr_data_url" TEXT NOT NULL,
     "vcard_content" TEXT,
@@ -59,9 +58,9 @@ CREATE TABLE "QRCode" (
 
 -- CreateTable
 CREATE TABLE "PrintingOrder" (
-    "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "vendor_id" INTEGER,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
+    "vendor_id" UUID,
     "design_config" JSONB NOT NULL,
     "qr_type" "QRType" NOT NULL,
     "quantity" INTEGER NOT NULL,
@@ -75,7 +74,7 @@ CREATE TABLE "PrintingOrder" (
 
 -- CreateTable
 CREATE TABLE "Vendor" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phone" TEXT,
@@ -95,7 +94,7 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_google_id_key" ON "User"("google_id");
+CREATE UNIQUE INDEX "User_firebase_uid_key" ON "User"("firebase_uid");
 
 -- CreateIndex
 CREATE INDEX "User_email_idx" ON "User"("email");

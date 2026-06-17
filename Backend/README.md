@@ -1,10 +1,10 @@
 # QRCard Backend API
 
-QR-based Digital Visiting Card backend — Node.js, Express, PostgreSQL, Prisma.
+QR-based Digital Visiting Card backend — Node.js, Express, Supabase PostgreSQL (via Prisma), Firebase Auth.
 
 ## Quick Start
 
-### 1. Start database (Docker)
+### 1. Start local storage service (Docker)
 
 ```bash
 docker compose up -d
@@ -20,7 +20,7 @@ npm install
 
 ```bash
 cp .env.example .env
-# Edit .env with your API keys (Google OAuth, Gemini, Resend optional)
+# Edit .env with your API keys (Firebase, Supabase, Gemini, Resend optional)
 ```
 
 ### 4. Run migrations and seed
@@ -38,23 +38,20 @@ npm run dev
 ```
 
 API: `http://localhost:5001`  
-Swagger docs: `http://localhost:5001/api-docs`  
+OpenAPI JSON (Postman import): `http://localhost:5001/openapi.json`  
 Health check: `http://localhost:5001/health`
 
 > **macOS note:** Port 5000 is often used by AirPlay Receiver. This project defaults to **5001** to avoid conflicts.
 
 ## Default Admin (seed)
 
-| Field    | Value            |
-|----------|------------------|
-| Email    | admin@qrcard.com |
-| Password | Admin@123        |
+Create your admin user in Firebase first, then set `ADMIN_FIREBASE_UID` in `.env` and run seed.
 
 ## API Routes
 
 | Prefix          | Description              |
 |-----------------|--------------------------|
-| `/api/auth`     | Register, login, OAuth   |
+| `/api/auth`     | Firebase sync, current user |
 | `/api/profile`  | Profile CRUD, avatar     |
 | `/api/qr`       | Online/offline QR codes  |
 | `/api/ai`       | Bio generator, suggestions |

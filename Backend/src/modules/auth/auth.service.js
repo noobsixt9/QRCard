@@ -1,68 +1,72 @@
-const bcrypt = require('bcrypt')
 const prisma = require('../../config/db')
-const { signToken, sanitizeUser } = require('../../utils/jwt')
+const { sanitizeUser, slugify } = require('../../utils/user')
 
-async function register({ email, username, password }) {
-  const existingEmail = await prisma.user.findUnique({ where: { email } })
-  if (existingEmail) {
-    const err = new Error('Email already taken')
+async function generateUniqueUsername(baseName) {
+  let base = slugify(baseName) || 'user'
+  if (base.length < 3) base = `${base}_user`
+
+  let username = base.slice(0, 20)
+  let exists = await prisma.user.findUnique({ where: { username } })
+  let attempt = 0
+
+  while (exists) {
+    attempt += 1
+    const suffix = `_${Math.floor(Math.random() * 10000)}`
+    username = `${base.slice(0, 20 - suffix.length)}${suffix}`
+    exists = await prisma.user.findUnique({ where: { username } })
+    if (attempt > 20) {
+      username = `user_${Date.now()}`
+      break
+    }
+  }
+
+  return username
+}
+
+async function syncUser(firebase, { username }) {
+  const { uid, email, name, picture } = firebase
+
+  if (!email) {
+    const err = new Error('Firebase account must have an email address')
+    err.status = 400
+    throw err
+  }
+
+  const existing = await prisma.user.findUnique({ where: { firebase_uid: uid } })
+  if (existing) {
+    return { user: sanitizeUser(existing), is_new: false }
+  }
+
+  const emailTaken = await prisma.user.findUnique({ where: { email } })
+  if (emailTaken) {
+    const err = new Error('An account with this email already exists')
     err.status = 409
     throw err
   }
 
-  const existingUsername = await prisma.user.findUnique({ where: { username } })
-  if (existingUsername) {
+  const usernameTaken = await prisma.user.findUnique({ where: { username } })
+  if (usernameTaken) {
     const err = new Error('Username already taken')
     err.status = 409
     throw err
   }
 
-  const password_hash = await bcrypt.hash(password, 12)
-
   const user = await prisma.user.create({
     data: {
+      firebase_uid: uid,
       email,
       username,
-      password_hash,
       role: 'USER',
-      profile: { create: {} },
+      profile: {
+        create: {
+          full_name: name || null,
+          avatar_url: picture || null,
+        },
+      },
     },
   })
 
-  const token = signToken(user)
-  return { token, user: sanitizeUser(user) }
-}
-
-async function login({ email, password }) {
-  const user = await prisma.user.findUnique({ where: { email } })
-
-  if (!user) {
-    const err = new Error('Invalid email or password')
-    err.status = 401
-    throw err
-  }
-
-  if (!user.password_hash) {
-    const err = new Error('Please sign in with Google')
-    err.status = 400
-    throw err
-  }
-
-  if (!user.is_active) {
-    const err = new Error('Account has been deactivated')
-    err.status = 403
-    throw err
-  }
-
-  const valid = await bcrypt.compare(password, user.password_hash)
-  if (!valid) {
-    const err = new Error('Invalid email or password')
-    err.status = 401
-    throw err
-  }
-
-  const token = signToken(user)
-  return { token, user: sanitizeUser(user) }
+  return { user: sanitizeUser(user), is_new: true }
 }
 
 async function getMe(userId) {
@@ -83,12 +87,7 @@ async function getMe(userId) {
     throw err
   }
 
-  return {
-    id: user.id,
-    email: user.email,
-    username: user.username,
-    role: user.role,
-  }
+  return sanitizeUser(user)
 }
 
-module.exports = { register, login, getMe }
+module.exports = { syncUser, getMe, generateUniqueUsername }

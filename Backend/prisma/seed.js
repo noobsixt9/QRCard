@@ -1,18 +1,24 @@
 const { PrismaClient } = require('@prisma/client')
-const bcrypt = require('bcrypt')
 
 const prisma = new PrismaClient()
 
 async function main() {
-  const passwordHash = await bcrypt.hash('Admin@123', 12)
+  const firebaseUid = process.env.ADMIN_FIREBASE_UID
+
+  if (!firebaseUid) {
+    console.log(
+      'Skipping admin seed: set ADMIN_FIREBASE_UID in .env to the Firebase UID of your admin user.'
+    )
+    return
+  }
 
   const admin = await prisma.user.upsert({
     where: { email: 'admin@qrcard.com' },
-    update: {},
+    update: { firebase_uid: firebaseUid, role: 'ADMIN' },
     create: {
+      firebase_uid: firebaseUid,
       email: 'admin@qrcard.com',
       username: 'admin',
-      password_hash: passwordHash,
       role: 'ADMIN',
       profile: {
         create: {

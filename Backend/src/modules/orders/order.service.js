@@ -88,7 +88,7 @@ async function listAllOrders(query) {
   const where = {}
 
   if (query.status) where.status = query.status
-  if (query.vendor_id) where.vendor_id = parseInt(query.vendor_id, 10)
+  if (query.vendor_id) where.vendor_id = query.vendor_id
 
   const [orders, total] = await Promise.all([
     prisma.printingOrder.findMany({

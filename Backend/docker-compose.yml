@@ -1,17 +1,4 @@
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: qrcard-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: qrcard
-      POSTGRES_PASSWORD: qrcard
-      POSTGRES_DB: qrcard
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   minio:
     image: minio/minio:latest
     container_name: qrcard-minio
@@ -27,5 +14,4 @@ services:
       - minio_data:/data
 
 volumes:
-  postgres_data:
   minio_data:

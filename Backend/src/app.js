@@ -5,9 +5,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const morgan = require('morgan')
 const path = require('path')
-const swaggerUi = require('swagger-ui-express')
-const passport = require('./config/passport')
-const swaggerSpec = require('./config/swagger')
+const openApiSpec = require('../openapi.json')
 const { generalLimiter } = require('./middleware/rateLimiter')
 const notFound = require('./middleware/notFound')
 const errorHandler = require('./middleware/errorHandler')
@@ -31,7 +29,6 @@ app.use(
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('dev'))
-app.use(passport.initialize())
 app.use(generalLimiter)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
@@ -39,9 +36,11 @@ app.get('/health', (_req, res) => {
   res.json({ success: true, message: 'QRCard API is running' })
 })
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }))
 app.get('/api-docs.json', (_req, res) => {
-  res.json(swaggerSpec)
+  res.json(openApiSpec)
+})
+app.get('/openapi.json', (_req, res) => {
+  res.json(openApiSpec)
 })
 
 app.use('/api/auth', authRoutes)

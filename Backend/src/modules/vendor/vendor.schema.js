@@ -11,7 +11,7 @@ const createVendorSchema = z.object({
 const updateVendorSchema = createVendorSchema.partial()
 
 const assignVendorSchema = z.object({
-  vendor_id: z.number().int().positive(),
+  vendor_id: z.string().uuid('Invalid vendor_id'),
 })
 
 module.exports = { createVendorSchema, updateVendorSchema, assignVendorSchema }

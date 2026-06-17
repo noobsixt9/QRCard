@@ -1,17 +1,15 @@
 const express = require('express')
 const auth = require('../../middleware/auth')
-const validate = require('../../middleware/validate')
+const requireUser = require('../../middleware/requireUser')
 const requireRole = require('../../middleware/requireRole')
+const validate = require('../../middleware/validate')
 const { authLimiter } = require('../../middleware/rateLimiter')
-const { registerSchema, loginSchema } = require('./auth.schema')
+const { syncSchema } = require('./auth.schema')
 const authController = require('./auth.controller')
 
 const router = express.Router()
 
-router.post('/register', authLimiter, validate(registerSchema), authController.register)
-router.post('/login', authLimiter, validate(loginSchema), authController.login)
-router.get('/me', auth, requireRole('USER', 'ADMIN'), authController.me)
-router.get('/google', authController.googleAuth)
-router.get('/google/callback', authController.googleCallback)
+router.post('/sync', authLimiter, auth, validate(syncSchema), authController.sync)
+router.get('/me', auth, requireUser, requireRole('USER', 'ADMIN'), authController.me)
 
 module.exports = router

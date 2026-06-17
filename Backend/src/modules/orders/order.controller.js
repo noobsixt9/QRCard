@@ -1,4 +1,5 @@
 const orderService = require('./order.service')
+const { parseUuid } = require('../../utils/uuid')
 
 async function create(req, res, next) {
   try {
@@ -24,7 +25,8 @@ async function list(req, res, next) {
 
 async function getOne(req, res, next) {
   try {
-    const order = await orderService.getUserOrder(req.user.id, parseInt(req.params.id, 10))
+    const orderId = parseUuid(req.params.id, 'order id')
+    const order = await orderService.getUserOrder(req.user.id, orderId)
     res.status(200).json({ success: true, data: order })
   } catch (err) {
     next(err)
@@ -33,7 +35,8 @@ async function getOne(req, res, next) {
 
 async function cancel(req, res, next) {
   try {
-    const order = await orderService.cancelOrder(req.user.id, parseInt(req.params.id, 10))
+    const orderId = parseUuid(req.params.id, 'order id')
+    const order = await orderService.cancelOrder(req.user.id, orderId)
     res.status(200).json({
       success: true,
       message: 'Order cancelled successfully',
