@@ -23,6 +23,16 @@ cp .env.example .env
 # Edit .env with your API keys (Firebase, Supabase, Gemini, Resend optional)
 ```
 
+For Supabase + Prisma, use both database URLs:
+
+- `DATABASE_URL`: transaction-mode pooler URL (runtime queries from the app)
+- `DIRECT_URL`: session-mode URL (Prisma migrations and introspection)
+
+```env
+DATABASE_URL=postgresql://postgres.<project-ref>:<password>@aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true
+DIRECT_URL=postgresql://postgres.<project-ref>:<password>@aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres
+```
+
 ### 4. Run migrations and seed
 
 ```bash
