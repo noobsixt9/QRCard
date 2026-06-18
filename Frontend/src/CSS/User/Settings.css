@@ -1,0 +1,373 @@
+/* =========================
+   USER SETTINGS PAGE
+========================= */
+
+.settings-page,
+.settings-page * {
+  box-sizing: border-box;
+}
+
+.settings-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f3f4f6;
+  display: flex;
+  color: #111827;
+}
+
+.settings-main {
+  flex: 1;
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 42px 52px 70px;
+}
+
+/* Header */
+.settings-header {
+  max-width: 1080px;
+  margin-bottom: 34px;
+}
+
+.settings-header h1 {
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 10px;
+  letter-spacing: -0.6px;
+}
+
+.settings-header p {
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 650;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Layout */
+.settings-layout {
+  width: 100%;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: 650px 340px;
+  gap: 42px;
+  align-items: start;
+}
+
+.settings-left,
+.settings-right {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Cards */
+.settings-card,
+.settings-save-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.settings-card {
+  padding: 34px 34px;
+}
+
+.settings-card h2 {
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 12px;
+  letter-spacing: -0.3px;
+}
+
+.settings-card-subtitle {
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0 0 28px;
+}
+
+/* Form */
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 28px;
+}
+
+.settings-form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 850;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.settings-form-group input {
+  width: 100%;
+  height: 43px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  background: #ffffff;
+  color: #111827;
+}
+
+.settings-form-group input::placeholder {
+  color: #94a3b8;
+}
+
+.settings-form-group input:focus {
+  border-color: #4f6bed;
+}
+
+.full-settings-field {
+  grid-column: span 2;
+}
+
+/* Preference Rows */
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-row h3 {
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.setting-row p {
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Toggle */
+.settings-toggle {
+  width: 48px;
+  height: 26px;
+  border: none;
+  border-radius: 999px;
+  background: #cbd5e1;
+  padding: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: 0.2s ease;
+}
+
+.settings-toggle span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: block;
+  transition: 0.2s ease;
+}
+
+.settings-toggle.active {
+  background: #4f6bed;
+}
+
+.settings-toggle.active span {
+  transform: translateX(22px);
+}
+
+/* Default QR */
+.default-qr-section {
+  margin-top: 24px;
+}
+
+.default-qr-section label {
+  display: block;
+  font-size: 13px;
+  font-weight: 850;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.default-qr-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.default-qr-options button {
+  height: 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.default-qr-options button.active {
+  background: #eef2ff;
+  border-color: #bfdbfe;
+  color: #4f6bed;
+}
+
+/* Danger */
+.danger-card {
+  border-color: #fecaca;
+  background: #fffafa;
+}
+
+.danger-card p {
+  font-size: 13px;
+  line-height: 1.65;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0 0 24px;
+}
+
+.delete-account-btn {
+  width: 145px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.delete-account-btn:hover {
+  background: #b91c1c;
+}
+
+/* Save */
+.settings-save-card {
+  padding: 26px;
+}
+
+.save-settings-btn {
+  width: 100%;
+  height: 43px;
+  border: none;
+  border-radius: 8px;
+  background: #4f6bed;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.save-settings-btn:hover {
+  background: #4058d8;
+}
+
+.save-settings-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.settings-message {
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 750;
+  margin: 14px 0 0;
+}
+
+.success-message {
+  color: #16a34a;
+}
+
+.error-message {
+  color: #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .settings-main {
+    padding: 38px 36px 60px;
+  }
+
+  .settings-layout {
+    max-width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .settings-right {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .settings-save-card {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .settings-page {
+    flex-direction: column;
+  }
+
+  .settings-main {
+    padding: 78px 20px 50px;
+  }
+
+  .settings-header h1 {
+    font-size: 27px;
+  }
+
+  .settings-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-settings-field {
+    grid-column: span 1;
+  }
+
+  .settings-right {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-save-card {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-main {
+    padding: 76px 16px 45px;
+  }
+
+  .settings-card,
+  .settings-save-card {
+    padding: 26px 22px;
+  }
+
+  .settings-header h1 {
+    font-size: 24px;
+  }
+
+  .settings-card h2 {
+    font-size: 20px;
+  }
+
+  .delete-account-btn {
+    width: 100%;
+  }
+}

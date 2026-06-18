@@ -1,0 +1,295 @@
+.ai-bio-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f3f4f6;
+  display: flex;
+}
+
+.ai-bio-main {
+  flex: 1;
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 42px 42px 70px;
+}
+
+.ai-bio-header {
+  margin-bottom: 40px;
+}
+
+.ai-bio-header h1 {
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.ai-bio-header p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Main Layout */
+.ai-bio-layout {
+  max-width: 870px;
+  display: grid;
+  grid-template-columns: 390px 430px;
+  gap: 34px;
+  align-items: start;
+}
+
+/* Left Card */
+.bio-details-card,
+.generated-bio-card,
+.bio-suggestion-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+}
+
+.bio-details-card {
+  padding: 32px 32px 28px;
+}
+
+.bio-details-card h2,
+.generated-bio-card h2,
+.bio-suggestion-card h2 {
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 850;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.card-subtitle {
+  max-width: 300px;
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: 700;
+  color: #64748b;
+  margin: 12px 0 18px;
+}
+
+.bio-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.bio-form-group label,
+.tone-section label {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.bio-form-group input,
+.bio-form-group textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+}
+
+.bio-form-group input {
+  height: 40px;
+  padding: 0 16px;
+}
+
+.bio-form-group textarea {
+  height: 65px;
+  padding: 18px 16px;
+  resize: none;
+}
+
+.bio-form-group input::placeholder,
+.bio-form-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+.bio-form-group input:focus,
+.bio-form-group textarea:focus {
+  border-color: #4f6bed;
+}
+
+.tone-options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tone-pill {
+  height: 31px;
+  padding: 0 17px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tone-pill.active {
+  background: #eef2ff;
+  border-color: #bfdbfe;
+  color: #4f6bed;
+}
+
+.generate-bio-btn {
+  width: 150px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: #7c3aed;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* Right Column */
+.bio-result-column {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.generated-bio-card {
+  padding: 32px 32px 34px;
+}
+
+.generated-bio-box {
+  min-height: 170px;
+  border: 1px solid #cbd5e1;
+  border-radius: 11px;
+  background: #f8fafc;
+  padding: 24px 22px;
+  margin-top: 24px;
+}
+
+.generated-bio-box p {
+  font-size: 13px;
+  line-height: 1.75;
+  font-weight: 600;
+  color: #334155;
+  margin: 0;
+}
+
+.bio-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.bio-action-buttons button {
+  height: 38px;
+  padding: 0 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.use-bio-btn {
+  border: none;
+  background: #4f6bed;
+  color: #ffffff;
+}
+
+.secondary-bio-btn {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #111827;
+}
+
+/* Suggestion Card */
+.bio-suggestion-card {
+  padding: 32px;
+}
+
+.bio-suggestion-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+}
+
+.bio-suggestion-card li {
+  font-size: 13px;
+  line-height: 1.9;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.bio-suggestion-card li::before {
+  content: "• ";
+  color: #64748b;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .ai-bio-main {
+    padding: 38px 30px 60px;
+  }
+
+  .ai-bio-layout {
+    max-width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .bio-result-column {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .ai-bio-page {
+    flex-direction: column;
+  }
+
+  .ai-bio-main {
+    padding: 78px 20px 50px;
+  }
+
+  .tone-options {
+    flex-wrap: wrap;
+  }
+
+  .bio-action-buttons {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-bio-main {
+    padding: 76px 16px 45px;
+  }
+
+  .ai-bio-header h1 {
+    font-size: 25px;
+  }
+
+  .bio-details-card,
+  .generated-bio-card,
+  .bio-suggestion-card {
+    padding: 26px 22px;
+  }
+
+  .generate-bio-btn,
+  .bio-action-buttons button {
+    width: 100%;
+  }
+}

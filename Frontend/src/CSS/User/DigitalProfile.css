@@ -1,0 +1,457 @@
+/* =========================
+   DIGITAL PROFILE PAGE
+========================= */
+
+.digital-profile-page,
+.digital-profile-page * {
+  box-sizing: border-box;
+}
+
+.digital-profile-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f3f4f6;
+  display: flex;
+  color: #111827;
+}
+
+.digital-profile-content {
+  flex: 1;
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 42px 52px 70px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.profile-header {
+  max-width: 980px;
+  margin-bottom: 34px;
+}
+
+.profile-header h1 {
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 10px;
+  letter-spacing: -0.6px;
+}
+
+.profile-header p {
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 650;
+  color: #64748b;
+  margin: 0;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.profile-layout {
+  width: 100%;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: 640px 340px;
+  gap: 42px;
+  align-items: start;
+}
+
+/* =========================
+   FORM CARD
+========================= */
+
+.profile-form-card,
+.profile-status-card,
+.ai-suggestion-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.profile-form-card {
+  padding: 42px 42px 40px;
+}
+
+.profile-form-card > h2 {
+  font-size: 25px;
+  line-height: 1.2;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 34px;
+  letter-spacing: -0.4px;
+}
+
+.profile-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 32px;
+}
+
+.form-group label,
+.photo-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 850;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.form-group input {
+  width: 100%;
+  height: 43px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  background: #ffffff;
+  color: #111827;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #4f6bed;
+}
+
+/* =========================
+   PHOTO UPLOAD
+========================= */
+
+.photo-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #4f6bed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 850;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  object-fit: cover;
+}
+
+.photo-row .upload-photo-btn {
+  width: 135px;
+  height: 38px;
+  margin: 0;
+  border: none;
+  border-radius: 8px;
+  background: #eef2ff;
+  color: #4f6bed;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-photo-btn input {
+  display: none;
+}
+
+/* =========================
+   CONTACT SECTION
+========================= */
+
+.form-section-title {
+  grid-column: span 2;
+  margin-top: 26px;
+}
+
+.form-section-title h2 {
+  font-size: 25px;
+  line-height: 1.2;
+  font-weight: 850;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.4px;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.form-group textarea {
+  width: 100%;
+  height: 88px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 17px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  resize: none;
+  background: #ffffff;
+  color: #111827;
+}
+
+/* =========================
+   SAVE BUTTON + MESSAGE
+========================= */
+
+.save-profile-btn {
+  width: 145px;
+  height: 43px;
+  border: none;
+  border-radius: 8px;
+  background: #4f6bed;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.save-profile-btn:hover {
+  background: #4058d8;
+}
+
+.save-profile-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.profile-save-message {
+  grid-column: span 2;
+  font-size: 13px;
+  font-weight: 750;
+  margin: 0;
+}
+
+.success-message {
+  color: #16a34a;
+}
+
+.error-message {
+  color: #dc2626;
+}
+
+/* =========================
+   RIGHT SIDE CARDS
+========================= */
+
+.profile-side {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.profile-status-card {
+  padding: 34px 34px;
+  min-height: 245px;
+}
+
+.profile-status-card h3,
+.ai-suggestion-card h3 {
+  font-size: 21px;
+  line-height: 1.2;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 18px;
+  letter-spacing: -0.3px;
+}
+
+.profile-status-card h1 {
+  font-size: 52px;
+  line-height: 1;
+  font-weight: 900;
+  color: #4f6bed;
+  margin: 0 0 22px;
+  letter-spacing: -1px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  margin-bottom: 26px;
+  overflow: hidden;
+}
+
+.progress-bar span {
+  display: block;
+  width: 75%;
+  height: 100%;
+  background: #4f6bed;
+  border-radius: 999px;
+}
+
+.profile-status-card p {
+  font-size: 13px;
+  line-height: 1.8;
+  font-weight: 600;
+  margin: 0;
+}
+
+.profile-status-card .success {
+  color: #16a34a;
+}
+
+.profile-status-card .error {
+  color: #dc2626;
+}
+
+/* AI Suggestion */
+.ai-suggestion-card {
+  padding: 34px 34px;
+  min-height: 205px;
+}
+
+.ai-suggestion-card p {
+  font-size: 14px;
+  line-height: 1.65;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 28px;
+}
+
+.ai-suggestion-card button {
+  width: 150px;
+  height: 43px;
+  border: none;
+  border-radius: 8px;
+  background: #7c3aed;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.ai-suggestion-card button:hover {
+  background: #6d28d9;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1200px) {
+  .digital-profile-content {
+    padding: 38px 36px 60px;
+  }
+
+  .profile-layout {
+    max-width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .profile-side {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .digital-profile-page {
+    flex-direction: column;
+  }
+
+  .digital-profile-content {
+    padding: 78px 20px 50px;
+  }
+
+  .profile-header h1 {
+    font-size: 27px;
+  }
+
+  .profile-header p {
+    font-size: 13px;
+  }
+
+  .profile-form-card {
+    padding: 30px 24px;
+  }
+
+  .profile-form {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .form-section-title,
+  .full-width,
+  .profile-save-message {
+    grid-column: span 1;
+  }
+
+  .profile-side {
+    grid-template-columns: 1fr;
+  }
+
+  .save-profile-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .digital-profile-content {
+    padding: 76px 16px 45px;
+  }
+
+  .profile-form-card,
+  .profile-status-card,
+  .ai-suggestion-card {
+    border-radius: 14px;
+  }
+
+  .profile-form-card {
+    padding: 26px 20px;
+  }
+
+  .profile-header h1 {
+    font-size: 24px;
+  }
+
+  .profile-form-card > h2,
+  .form-section-title h2 {
+    font-size: 21px;
+  }
+
+  .photo-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .photo-row .upload-photo-btn {
+    width: 100%;
+  }
+
+  .profile-status-card,
+  .ai-suggestion-card {
+    padding: 28px 22px;
+  }
+
+  .ai-suggestion-card button {
+    width: 100%;
+  }
+}

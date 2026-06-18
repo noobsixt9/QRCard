@@ -1,0 +1,439 @@
+/* =========================
+   CARD DESIGN PAGE
+========================= */
+
+.card-design-page,
+.card-design-page * {
+  box-sizing: border-box;
+}
+
+.card-design-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f3f4f6;
+  display: flex;
+  color: #111827;
+}
+
+.card-design-main {
+  flex: 1;
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 42px 52px 70px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.card-design-header {
+  margin-bottom: 36px;
+}
+
+.card-design-header h1 {
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 10px;
+  letter-spacing: -0.7px;
+}
+
+.card-design-header p {
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.card-design-layout {
+  width: 100%;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+/* =========================
+   CUSTOMIZE CARD PANEL
+========================= */
+
+.customize-card {
+  min-height: 520px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px 28px;
+}
+
+.customize-card h2,
+.live-preview-card h2 {
+  font-size: 21px;
+  line-height: 1.2;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 28px;
+  letter-spacing: -0.3px;
+}
+
+.design-control-group {
+  margin-bottom: 28px;
+}
+
+.design-control-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 850;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+/* QR Type */
+.qr-type-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.qr-type-options button {
+  height: 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.qr-type-options button.active {
+  background: #eef2ff;
+  border-color: #bfdbfe;
+  color: #4f6bed;
+}
+
+/* Template Style */
+.template-style-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.template-style-list button {
+  width: 100%;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+
+.template-style-list button.active {
+  background: #eef2ff;
+  border-color: #bfdbfe;
+  color: #4f6bed;
+}
+
+/* Color Theme */
+.color-theme-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-dot {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.theme-dot.blue {
+  background: #4f6bed;
+}
+
+.theme-dot.purple {
+  background: #6d5dfc;
+}
+
+.theme-dot.dark {
+  background: #111827;
+}
+
+.theme-dot.green {
+  background: #5aa469;
+}
+
+/* Buttons */
+.design-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 72px;
+}
+
+.preview-card-btn,
+.print-order-btn {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.preview-card-btn {
+  border: none;
+  background: #4f6bed;
+  color: #ffffff;
+}
+
+.print-order-btn {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #111827;
+}
+
+/* =========================
+   LIVE PREVIEW PANEL
+========================= */
+
+.live-preview-card {
+  min-height: 520px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px 48px;
+}
+
+.live-preview-card h2 {
+  margin-bottom: 10px;
+}
+
+.live-preview-card > p {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0 0 48px;
+}
+
+/* Front Visiting Card */
+.visiting-card-front {
+  width: 360px;
+  height: 150px;
+  margin: 0 auto 26px;
+  padding: 24px 28px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.card-info {
+  min-width: 0;
+}
+
+.card-brand {
+  display: block;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 850;
+  color: #4f6bed;
+  margin-bottom: 22px;
+}
+
+.card-info h3 {
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 850;
+  color: #111827;
+  margin: 0 0 7px;
+}
+
+.card-info > p {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0 0 14px;
+}
+
+.card-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-contact span {
+  display: block;
+  font-size: 8px;
+  line-height: 1.15;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.preview-qr-box {
+  width: 82px;
+  height: 82px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #f8fafc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #111827;
+  font-size: 24px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* Back Visiting Card */
+.visiting-card-back {
+  width: 360px;
+  height: 130px;
+  margin: 0 auto;
+  border-radius: 12px;
+  background: #4f6bed;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.visiting-card-back h3 {
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 850;
+  color: #ffffff;
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.visiting-card-back p {
+  font-size: 10px;
+  font-weight: 700;
+  color: #dbeafe;
+  margin: 0;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1200px) {
+  .card-design-main {
+    padding: 38px 36px 60px;
+  }
+
+  .card-design-layout {
+    max-width: 100%;
+    grid-template-columns: 280px 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 900px) {
+  .card-design-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .customize-card,
+  .live-preview-card {
+    min-height: auto;
+  }
+
+  .design-action-buttons {
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-design-page {
+    flex-direction: column;
+  }
+
+  .card-design-main {
+    padding: 78px 20px 50px;
+  }
+
+  .card-design-header h1 {
+    font-size: 27px;
+  }
+
+  .card-design-header p {
+    font-size: 13px;
+  }
+
+  .live-preview-card {
+    padding: 28px 24px;
+  }
+
+  .visiting-card-front,
+  .visiting-card-back {
+    width: 100%;
+    max-width: 360px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-design-main {
+    padding: 76px 16px 45px;
+  }
+
+  .customize-card,
+  .live-preview-card {
+    padding: 26px 22px;
+  }
+
+  .card-design-header h1 {
+    font-size: 24px;
+  }
+
+  .qr-type-options {
+    gap: 10px;
+  }
+
+  .visiting-card-front {
+    height: auto;
+    min-height: 150px;
+    padding: 22px;
+  }
+
+  .card-info h3 {
+    font-size: 17px;
+  }
+
+  .preview-qr-box {
+    width: 68px;
+    height: 68px;
+    font-size: 20px;
+  }
+
+  .visiting-card-back {
+    height: 100px;
+  }
+
+  .visiting-card-back h3 {
+    font-size: 14px;
+  }
+}
