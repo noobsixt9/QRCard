@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../../CSS/User/Sidebar.css";
-
+import ThemeToggle from "../ThemeToggle";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,6 +66,7 @@ const Sidebar = () => {
           </NavLink>
           
         </nav>
+        
 
         <button type="button" className="logout-btn" onClick={handleLogout}>
           Log Out

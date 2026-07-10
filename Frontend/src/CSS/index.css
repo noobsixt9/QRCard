@@ -27,3 +27,76 @@ select {
 a {
   color: inherit;
 }
+:root {
+  --page-bg: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-light: #64748b;
+  --border-color: #cbd5e1;
+  --input-bg: #ffffff;
+}
+
+html[data-theme="dark"] {
+  --page-bg: #0f172a;
+  --card-bg: #182235;
+  --text-main: #f8fafc;
+  --text-light: #aebbd0;
+  --border-color: #334155;
+  --input-bg: #111c2e;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--text-main);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.dashboard-page,
+.dashboard-main,
+.digital-profile-page,
+.digital-profile-content,
+.page-wrapper {
+  background: var(--page-bg);
+  color: var(--text-main);
+}
+
+.dashboard-stat-card,
+.dashboard-action-card,
+.profile-form-card,
+.profile-status-card,
+.ai-suggestion-card,
+.form-box {
+  background: var(--card-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+label {
+  color: var(--text-main);
+}
+
+p {
+  color: var(--text-light);
+}
+
+input,
+textarea,
+select {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.theme-toggle-btn {
+  padding: 9px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text-main);
+  cursor: pointer;
+  font-weight: 600;
+}

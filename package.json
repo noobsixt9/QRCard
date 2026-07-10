@@ -1,0 +1,22 @@
+{
+  "name": "qrcard-root",
+  "version": "1.0.0",
+  "description": "QRCard Root Workspace — Connects React Frontend and Node.js Backend",
+  "scripts": {
+    "setup": "npm install && npm run setup:backend && npm run setup:frontend",
+    "setup:backend": "cd Backend && npm install && npx prisma generate",
+    "setup:frontend": "cd Frontend && npm install",
+    "dev:backend": "npm run dev --prefix Backend",
+    "dev:frontend": "npm run dev --prefix Frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "db:migrate": "npm run db:migrate --prefix Backend",
+    "db:seed": "npm run db:seed --prefix Backend",
+    "db:studio": "npm run db:studio --prefix Backend"
+  },
+  "dependencies": {
+    "@react-oauth/google": "^0.13.5"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

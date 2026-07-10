@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./CSS/App.css";
 import Register from './Pages/Register';
 import Login from './Pages/Login';
+import OTPVerification from "./Pages/OTPVerification";
 import ErrorPage from "./Pages/ErrorPage";
 import LandingPage from "./Pages/LandingPage";
 import Dashboard from "./Pages/User/Dashboard";
@@ -12,6 +13,8 @@ import CardDesign from "./Pages/User/CardDesign";
 import Orders from "./Pages/User/Orders";
 import PrintingOrders from "./Pages/User/PrintingOrders";
 import Settings from "./Pages/User/Settings";
+import PublicProfile from "./Pages/PublicProfile";
+
 
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import AdminUsers from "./Pages/Admin/Users";
@@ -32,8 +35,10 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/verify-otp" element={<OTPVerification />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/digital-profile" element={<DigitalProfile />} />
+        <Route path="/u/:username" element={<PublicProfile />} />
         <Route path="*" element={<ErrorPage />} />
         <Route path="/qr-codes" element={<QRCodes />} />
         <Route path="/ai-bio" element={<AIBio />} />

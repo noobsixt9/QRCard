@@ -21,6 +21,7 @@ const Header = () => {
       </nav>
 
       <div className="header-actions">
+    
         <NavLink to="/login" className="header-login-link">
           Login
         </NavLink>

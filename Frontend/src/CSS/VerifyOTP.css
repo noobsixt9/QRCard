@@ -1,0 +1,96 @@
+/* =========================
+   OTP VERIFICATION STYLES
+   ========================= */
+
+.otp-inputs-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 25px 0;
+}
+
+.otp-input-field {
+  width: 38px;
+  height: 44px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-main);
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.otp-input-field:focus {
+  border-color: #4f6bed;
+  box-shadow: 0 0 0 3px rgba(79, 107, 237, 0.15);
+}
+
+.recaptcha-outer-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.otp-resend-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.countdown-text {
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.countdown-text span {
+  font-weight: 600;
+  color: #4f6bed;
+}
+
+.btn-resend-otp {
+  background: none;
+  border: none;
+  color: #4f6bed;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.btn-resend-otp:hover {
+  background-color: rgba(79, 107, 237, 0.08);
+  text-decoration: underline;
+}
+
+.auth-success-message {
+  color: #10b981;
+  font-size: 13px;
+  margin: 10px 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Light / Dark Mode Override adjustments for OTP elements */
+html[data-theme="dark"] .otp-input-field {
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .otp-input-field:focus {
+  border-color: #4f6bed;
+}
+
+.auth-sidebar,
+.auth-form-section {
+  height: auto !important;
+  min-height: 515px;
+}
+
+.form-box {
+  height: auto !important;
+  min-height: 515px;
+  padding: 36px 20px !important;
+}

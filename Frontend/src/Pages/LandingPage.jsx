@@ -99,6 +99,8 @@ const LandingPage = () => {
           </div>
         </section>
 
+
+
         {/* HOW IT WORKS */}
         <section className="how-it-works-section" id="how-it-works">
           <div className="landing-section-heading">
