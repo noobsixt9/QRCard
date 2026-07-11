@@ -107,6 +107,19 @@ model PrintingOrder {
   @@index([vendor_id])
 }
 
+model SignupVerification {
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique
+  username      String
+  password_hash String
+  otp_hash      String
+  otp_expires   DateTime
+  created_at    DateTime @default(now())
+
+  @@index([email])
+  @@index([otp_expires])
+}
+
 model Vendor {
   id         String          @id @default(uuid()) @db.Uuid
   name       String

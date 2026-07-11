@@ -18,8 +18,8 @@ async function generateBio(userId) {
     throw err
   }
 
-  const prompt = `Generate a concise, professional bio in 2-3 sentences for the following person.
-Write in third person. Do not include any extra commentary or formatting.
+  const prompt = `Generate a concise, professional bio in 2-3 sentences for a digital visiting card.
+Write in first person (use "I" / "my"). Do not include any extra commentary or formatting.
 
 Name: ${profile.full_name}
 Job Title: ${profile.job_title}

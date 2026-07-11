@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "QRCard Backend API",
-    "description": "Generated from Express routes in src/app.js and src/modules/**/*.routes.js",
+    "description": "# QRCard Backend API\n\nThis Postman collection documents the current QRCard backend API for authentication, profile management, QR generation, AI suggestions, printing orders, and admin operations.\n\n## Base URL\n- `{{baseUrl}}` defaults to `http://localhost:5001`\n\n## Authentication\nThis API supports two auth flows:\n- App JWT from `POST /api/auth/register` or `POST /api/auth/login`\n- Firebase ID token for social auth sync via `POST /api/auth/sync`\n\nSet `{{authToken}}` before calling protected endpoints.\n\n## Common response shape\nSuccessful responses usually return:\n```json\n{\n  \"success\": true,\n  \"message\": \"Optional message\",\n  \"data\": {}\n}\n```\n\nValidation failures usually return:\n```json\n{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": [\n    { \"field\": \"fieldName\", \"message\": \"Why it failed\" }\n  ]\n}\n```\n\n## Notes\n- Admin routes require an authenticated user with role `ADMIN`.\n- User routes require role `USER` or `ADMIN`.\n- For avatar upload, switch the request body to `form-data` in Postman and attach a file under the `avatar` key.\n- Path placeholders like `:id`, `:username`, and `:type` should be replaced with real values before sending the request.\n",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -21,11 +21,13 @@
               "path": [
                 "health"
               ]
-            }
+            },
+            "description": "Check whether the API server is up.\n\nNo authentication required."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Basic service availability check. Use this first to verify the backend is running and reachable."
     },
     {
       "name": "Auth",
@@ -60,7 +62,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Create a new email/password account.\n\nReturns an app JWT token and the newly created user. Use this as the primary non-social registration flow."
           },
           "response": []
         },
@@ -94,7 +97,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Log in with email and password.\n\nReturns an app JWT token. Save the token into `{{authToken}}` to call protected endpoints."
           },
           "response": []
         },
@@ -128,7 +132,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Start the password reset flow.\n\nCurrent implementation generates and stores a reset token, then returns token data for manual testing. In a production-ready flow, this would usually email a reset link or code."
           },
           "response": []
         },
@@ -162,7 +167,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Complete the password reset flow using a previously generated reset token.\n\nSubmit the token from the forgot-password step with the new password."
           },
           "response": []
         },
@@ -201,7 +207,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Link or create a backend user from a Firebase-authenticated social account.\n\nSend a Firebase ID token in `Authorization`. Useful when social OAuth is used as an additional auth method."
           },
           "response": []
         },
@@ -226,11 +233,13 @@
                 "auth",
                 "me"
               ]
-            }
+            },
+            "description": "Return the currently authenticated backend user.\n\nRequires a valid app JWT or Firebase-authenticated synced user."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Authentication and account lifecycle endpoints. Includes email/password register/login, password reset flow, Firebase social account sync, and current-user lookup."
     },
     {
       "name": "Profile",
@@ -251,7 +260,8 @@
                 "public",
                 ":username"
               ]
-            }
+            },
+            "description": "Fetch the public profile by username.\n\nThis is the endpoint typically used by QR links and public visiting card views. No authentication required."
           },
           "response": []
         },
@@ -275,7 +285,8 @@
                 "api",
                 "profile"
               ]
-            }
+            },
+            "description": "Fetch the full private profile for the currently authenticated user."
           },
           "response": []
         },
@@ -313,7 +324,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Update the current user's profile fields.\n\nThis is the main endpoint used by the profile form to save visiting card details."
           },
           "response": []
         },
@@ -338,7 +350,8 @@
                 "profile",
                 "avatar"
               ]
-            }
+            },
+            "description": "Upload or replace the current user's avatar image.\n\nUse `form-data` in Postman with a file field named `avatar`."
           },
           "response": []
         },
@@ -363,11 +376,13 @@
                 "profile",
                 "avatar"
               ]
-            }
+            },
+            "description": "Remove the current user's avatar."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Profile management endpoints for the digital visiting card. Includes public profile lookup, private profile read/update, and avatar management."
     },
     {
       "name": "QR",
@@ -393,7 +408,8 @@
                 "qr",
                 "online"
               ]
-            }
+            },
+            "description": "Generate or regenerate the online QR code that points to the user's public profile URL."
           },
           "response": []
         },
@@ -418,7 +434,8 @@
                 "qr",
                 "offline"
               ]
-            }
+            },
+            "description": "Generate or regenerate the offline QR code that contains vCard contact information."
           },
           "response": []
         },
@@ -442,7 +459,8 @@
                 "api",
                 "qr"
               ]
-            }
+            },
+            "description": "Get the current user's saved QR code records."
           },
           "response": []
         },
@@ -467,11 +485,13 @@
                 "qr",
                 ":type"
               ]
-            }
+            },
+            "description": "Delete a QR code by type. Replace `:type` with `ONLINE` or `OFFLINE`."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "QR code generation and retrieval endpoints. Supports online QR (profile URL) and offline QR (vCard payload)."
     },
     {
       "name": "AI",
@@ -497,7 +517,8 @@
                 "ai",
                 "bio"
               ]
-            }
+            },
+            "description": "Generate a professional bio suggestion from the user's current profile data.\n\nRequires enough profile information to be useful."
           },
           "response": []
         },
@@ -522,11 +543,13 @@
                 "ai",
                 "completeness"
               ]
-            }
+            },
+            "description": "Return profile completeness score, level, and AI-style suggestions for missing information."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "AI-assisted profile helpers. These endpoints generate bio suggestions and profile completeness insights for authenticated users."
     },
     {
       "name": "Orders",
@@ -565,7 +588,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Create a new card printing order for the current user.\n\nRequires an existing QR of the selected type."
           },
           "response": []
         },
@@ -603,7 +627,8 @@
                   "value": ""
                 }
               ]
-            }
+            },
+            "description": "List the current user's printing orders.\n\nSupports optional pagination and status filtering."
           },
           "response": []
         },
@@ -628,7 +653,8 @@
                 "orders",
                 ":id"
               ]
-            }
+            },
+            "description": "Get one printing order belonging to the current user."
           },
           "response": []
         },
@@ -654,11 +680,13 @@
                 ":id",
                 "cancel"
               ]
-            }
+            },
+            "description": "Cancel a pending printing order.\n\nOnly pending orders can be cancelled."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Printing order endpoints for authenticated users. Includes placing orders, viewing order history, reading a single order, and cancelling pending orders."
     },
     {
       "name": "Admin",
@@ -684,7 +712,8 @@
                 "admin",
                 "dashboard"
               ]
-            }
+            },
+            "description": "Return admin dashboard metrics including user counts, order counts, and recent orders."
           },
           "response": []
         },
@@ -727,7 +756,8 @@
                   "value": ""
                 }
               ]
-            }
+            },
+            "description": "List all printing orders for admin review.\n\nSupports optional filters such as status and vendor assignment."
           },
           "response": []
         },
@@ -753,7 +783,8 @@
                 "orders",
                 ":id"
               ]
-            }
+            },
+            "description": "Return full details for a single order, including related user and vendor data."
           },
           "response": []
         },
@@ -794,7 +825,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Update an order's workflow status.\n\nTypical values include `PENDING`, `CONFIRMED`, `COMPLETED`, and `CANCELLED`."
           },
           "response": []
         },
@@ -835,7 +867,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Assign an order to a vendor and trigger the vendor delivery flow."
           },
           "response": []
         },
@@ -870,7 +903,8 @@
                   "value": ""
                 }
               ]
-            }
+            },
+            "description": "List all users for admin management.\n\nSupports pagination."
           },
           "response": []
         },
@@ -896,7 +930,8 @@
                 "users",
                 ":id"
               ]
-            }
+            },
+            "description": "Get one user's details, including profile and order history."
           },
           "response": []
         },
@@ -937,7 +972,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Activate or deactivate a user account."
           },
           "response": []
         },
@@ -976,7 +1012,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Create a new print vendor."
           },
           "response": []
         },
@@ -1001,7 +1038,8 @@
                 "admin",
                 "vendors"
               ]
-            }
+            },
+            "description": "List active print vendors."
           },
           "response": []
         },
@@ -1027,7 +1065,8 @@
                 "vendors",
                 ":id"
               ]
-            }
+            },
+            "description": "Get a single vendor and its related order information."
           },
           "response": []
         },
@@ -1067,7 +1106,8 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "description": "Update an existing vendor record."
           },
           "response": []
         },
@@ -1093,11 +1133,13 @@
                 "vendors",
                 ":id"
               ]
-            }
+            },
+            "description": "Soft-delete a vendor by marking it inactive."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Admin-only endpoints for dashboard metrics, user management, order processing, vendor assignment, and vendor CRUD."
     }
   ],
   "variable": [

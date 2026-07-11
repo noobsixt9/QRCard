@@ -3,6 +3,36 @@ const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const { sanitizeUser, slugify } = require('../../utils/user')
 const { signToken } = require('../../utils/jwt')
+const {
+  sendSignupOtpEmail,
+  SIGNUP_OTP_EXPIRY_MINUTES,
+} = require('../../utils/mailService')
+
+const OTP_EXPIRY_MINUTES = SIGNUP_OTP_EXPIRY_MINUTES
+
+function generateOtp() {
+  return String(crypto.randomInt(100000, 1000000))
+}
+
+function getOtpExpiry(minutes = OTP_EXPIRY_MINUTES) {
+  return new Date(Date.now() + 1000 * 60 * minutes)
+}
+
+async function assertSignupCredentialsAvailable({ email, username }) {
+  const existingEmail = await prisma.user.findUnique({ where: { email } })
+  if (existingEmail) {
+    const err = new Error('Email already taken')
+    err.status = 409
+    throw err
+  }
+
+  const existingUsername = await prisma.user.findUnique({ where: { username } })
+  if (existingUsername) {
+    const err = new Error('Username already taken')
+    err.status = 409
+    throw err
+  }
+}
 
 async function generateUniqueUsername(baseName) {
   let base = slugify(baseName) || 'user'
@@ -80,32 +110,85 @@ async function syncUser(firebase, { username }) {
   return { user: sanitizeUser(user), is_new: true }
 }
 
-async function register({ email, username, password }) {
-  const existingEmail = await prisma.user.findUnique({ where: { email } })
-  if (existingEmail) {
-    const err = new Error('Email already taken')
-    err.status = 409
-    throw err
-  }
-
-  const existingUsername = await prisma.user.findUnique({ where: { username } })
-  if (existingUsername) {
-    const err = new Error('Username already taken')
-    err.status = 409
-    throw err
-  }
+async function requestSignupOtp({ email, username, password }) {
+  await assertSignupCredentialsAvailable({ email, username })
 
   const password_hash = await bcrypt.hash(password, 12)
+  const otp = generateOtp()
+  const otp_hash = await bcrypt.hash(otp, 10)
+  const otp_expires = getOtpExpiry()
 
-  const user = await prisma.user.create({
-    data: {
+  await prisma.signupVerification.upsert({
+    where: { email },
+    update: {
+      username,
+      password_hash,
+      otp_hash,
+      otp_expires,
+    },
+    create: {
       email,
       username,
       password_hash,
+      otp_hash,
+      otp_expires,
+    },
+  })
+
+  const mailResult = await sendSignupOtpEmail(email, otp)
+
+  const data = {
+    email,
+    expires_at: otp_expires.toISOString(),
+    email_sent: mailResult.sent === true,
+  }
+
+  if (!mailResult.sent && mailResult.reason && mailResult.reason !== 'not_configured') {
+    data.email_error = mailResult.reason
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    data.otp = otp
+  }
+
+  return data
+}
+
+async function verifySignupOtp({ email, otp }) {
+  const pending = await prisma.signupVerification.findUnique({ where: { email } })
+
+  if (!pending || pending.otp_expires <= new Date()) {
+    if (pending) {
+      await prisma.signupVerification.delete({ where: { email } }).catch(() => {})
+    }
+    const err = new Error('Invalid or expired OTP')
+    err.status = 400
+    throw err
+  }
+
+  const validOtp = await bcrypt.compare(otp, pending.otp_hash)
+  if (!validOtp) {
+    const err = new Error('Invalid or expired OTP')
+    err.status = 400
+    throw err
+  }
+
+  await assertSignupCredentialsAvailable({
+    email: pending.email,
+    username: pending.username,
+  })
+
+  const user = await prisma.user.create({
+    data: {
+      email: pending.email,
+      username: pending.username,
+      password_hash: pending.password_hash,
       role: 'USER',
       profile: { create: {} },
     },
   })
+
+  await prisma.signupVerification.delete({ where: { email } })
 
   const token = signToken(user)
   return { token, user: sanitizeUser(user) }
@@ -207,7 +290,8 @@ async function getMe(userId) {
 }
 
 module.exports = {
-  register,
+  requestSignupOtp,
+  verifySignupOtp,
   login,
   forgotPassword,
   resetPassword,

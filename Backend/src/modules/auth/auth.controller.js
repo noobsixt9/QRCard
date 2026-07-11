@@ -1,8 +1,21 @@
 const authService = require('./auth.service')
 
-async function register(req, res, next) {
+async function requestSignupOtp(req, res, next) {
   try {
-    const result = await authService.register(req.body)
+    const result = await authService.requestSignupOtp(req.body)
+    res.status(200).json({
+      success: true,
+      message: 'Verification code sent. Check your email to complete signup.',
+      data: result,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function verifySignupOtp(req, res, next) {
+  try {
+    const result = await authService.verifySignupOtp(req.body)
     res.status(201).json({
       success: true,
       message: 'Account created successfully',
@@ -90,4 +103,12 @@ async function me(req, res, next) {
   }
 }
 
-module.exports = { register, login, forgotPassword, resetPassword, sync, me }
+module.exports = {
+  requestSignupOtp,
+  verifySignupOtp,
+  login,
+  forgotPassword,
+  resetPassword,
+  sync,
+  me,
+}
