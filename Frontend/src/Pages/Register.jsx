@@ -65,17 +65,15 @@
 
 // export default Register;
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Header from "../Component/Header";
 import { NavLink, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import RecaptchaWidget, { useRecaptchaScript } from "../Component/RecaptchaWidget";
 import "../CSS/Register.css";
 import { API_URL } from "../config/api";
 
 const Register = () => {
   const navigate = useNavigate();
-  const recaptchaRef = useRef(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -86,8 +84,6 @@ const Register = () => {
   });
 
   const [error, setError] = useState("");
-
-  useRecaptchaScript();
 
   const isFormValid =
     formData.fullName.trim() &&
@@ -130,43 +126,41 @@ const Register = () => {
       [name]: value,
     });
   };
-async function sendData(recaptchaToken) {
-  try {
-    const username = formData.username.trim();
-    const email = formData.email.trim();
-    const payload = {
-      username,
-      email,
-      password: formData.password,
-      recaptchaToken,
-    };
+  async function sendData() {
+    try {
+      const username = formData.username.trim();
+      const email = formData.email.trim();
+      const payload = {
+        username,
+        email,
+        password: formData.password,
+      };
 
-    const response = await fetch(`${API_URL}/auth/register/request-otp`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+      const response = await fetch(`${API_URL}/auth/register/request-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (!response.ok) {
-      throw new Error(result.message || "Registration failed.");
+      if (!response.ok) {
+        throw new Error(result.message || "Registration failed.");
+      }
+
+      sessionStorage.setItem("signupPending", JSON.stringify({
+        username,
+        email,
+        password: formData.password,
+      }));
+      navigate(`/verify-otp?email=${encodeURIComponent(email)}&purpose=REGISTRATION`);
+    } catch (error) {
+      console.error("Registration error:", error.message);
+      setError(error.message);
     }
-
-    sessionStorage.setItem("signupPending", JSON.stringify({
-      username,
-      email,
-      password: formData.password,
-    }));
-    navigate(`/verify-otp?email=${encodeURIComponent(email)}&purpose=REGISTRATION`);
-  } catch (error) {
-    console.error("Registration error:", error.message);
-    setError(error.message);
-    recaptchaRef.current?.reset();
   }
-}
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -191,13 +185,7 @@ async function sendData(recaptchaToken) {
       return;
     }
 
-    const recaptchaToken = recaptchaRef.current?.getToken();
-    if (!recaptchaToken) {
-      setError("Please complete the reCAPTCHA verification.");
-      return;
-    }
-
-    await sendData(recaptchaToken);
+    await sendData();
 
     // localStorage.setItem("userRole", "user");
     // localStorage.setItem(
@@ -313,9 +301,6 @@ async function sendData(recaptchaToken) {
                   maxLength="20"
                   required
                 />
-                <span className="input-hint">
-                  Your public profile will be at /u/{formData.username || "username"}
-                </span>
               </div>
 
               <div className="input-group">
@@ -355,7 +340,7 @@ async function sendData(recaptchaToken) {
                 />
               </div>
 
-              <RecaptchaWidget ref={recaptchaRef} widgetKey="register-recaptcha" />
+
 
               {error && <p className="auth-error-message">{error}</p>}
 
@@ -373,12 +358,17 @@ async function sendData(recaptchaToken) {
                 {(!import.meta.env.VITE_GOOGLE_CLIENT_ID || 
                   import.meta.env.VITE_GOOGLE_CLIENT_ID.includes("your_google_client_id") || 
                   import.meta.env.VITE_GOOGLE_CLIENT_ID.includes("xxxxxxxxxxxxxxxx") || 
-                  import.meta.env.VITE_GOOGLE_CLIENT_ID.startsWith("1234567890-")) ? (
+                  import.meta.env.VITE_GOOGLE_CLIENT_ID === "1234567890-xxxxxxxxxxxxxxxx.apps.googleusercontent.com") ? (
                   <button
                     type="button"
                     className="btn-google-auth"
                     style={{ marginTop: "10px" }}
-                    onClick={() => handleGoogleLogin({ credential: "dev_mode_bypass_token" })}
+                    onClick={() => {
+                      const chosenEmail = prompt("Enter email address to simulate Continue with Google:", "user@example.com");
+                      if (chosenEmail) {
+                        handleGoogleLogin({ credential: chosenEmail });
+                      }
+                    }}
                   >
                     <svg
                       style={{ width: "16px", height: "16px" }}
@@ -414,6 +404,7 @@ async function sendData(recaptchaToken) {
           </div>
         </section>
       </main>
+
     </div>
   );
 };

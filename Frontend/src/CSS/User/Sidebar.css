@@ -5,8 +5,8 @@
 .sidebar {
   width: 180px;
   min-height: 100vh;
-  background: #ffffff;
-  border-right: 1px solid #e5e7eb;
+  background: var(--card-bg);
+  border-right: 1px solid var(--border-color);
   padding: 28px 20px;
 
   display: flex;
@@ -14,13 +14,14 @@
   flex-shrink: 0;
 }
 
-/* Logo */
 .sidebar-logo {
   font-size: 19px;
   font-weight: 850;
   color: #4f6bed;
   letter-spacing: -0.4px;
   margin-bottom: 48px;
+  text-decoration: none;
+  display: block;
 }
 
 /* Menu */
@@ -41,14 +42,14 @@
 
   font-size: 12px;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-main);
   text-decoration: none;
 
   transition: 0.2s ease;
 }
 
 .sidebar-link:hover {
-  background: #f1f5f9;
+  background: var(--page-bg);
   color: #4f6bed;
 }
 

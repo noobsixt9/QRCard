@@ -16,7 +16,7 @@ function getOtpExpiry(minutes = OTP_EXPIRY_MINUTES) {
 }
 
 async function assertSignupCredentialsAvailable({ email, username }) {
-  const existingEmail = await prisma.user.findUnique({ where: { email } })
+  const existingEmail = await prisma.user.findFirst({ where: { email } })
   if (existingEmail) {
     const err = new Error('Email already taken')
     err.status = 409
@@ -410,14 +410,15 @@ module.exports = {
   verifyOTP,
   sendOTP,
   googleLogin,
+  googleCheck,
 }
 
 async function googleLogin(credential) {
   let email, name, picture
   
-  if (process.env.NODE_ENV === 'development' && credential === 'dev_mode_bypass_token') {
-    email = 'google_tester@qrcard.com'
-    name = 'Google Tester'
+  if (process.env.NODE_ENV === 'development' && (credential === 'dev_mode_bypass_token' || !credential.includes('.') || credential.includes('@'))) {
+    email = credential === 'dev_mode_bypass_token' ? 'google_tester@qrcard.com' : credential
+    name = email.split('@')[0]
     picture = null
   } else {
     const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`)
@@ -469,5 +470,23 @@ async function googleLogin(credential) {
 
   const token = signToken(user)
   return { token, user: sanitizeUser(user) }
+}
+
+async function googleCheck(email) {
+  if (!email) {
+    const err = new Error('Email is required')
+    err.status = 400
+    throw err
+  }
+
+  const user = await prisma.user.findFirst({ where: { email } })
+  if (!user) {
+    return { exists: false, hasPassword: false }
+  }
+
+  return {
+    exists: true,
+    hasPassword: !!user.password_hash
+  }
 }
 

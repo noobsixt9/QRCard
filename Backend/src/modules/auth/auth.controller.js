@@ -147,6 +147,23 @@ async function googleLogin(req, res, next) {
   }
 }
 
+async function googleCheck(req, res, next) {
+  try {
+    const { email } = req.body
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' })
+    }
+
+    const result = await authService.googleCheck(email)
+    res.status(200).json({
+      success: true,
+      data: result,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
   requestSignupOtp,
   verifySignupOtp,
@@ -158,4 +175,5 @@ module.exports = {
   verifyOTP,
   resendOTP,
   googleLogin,
+  googleCheck,
 }

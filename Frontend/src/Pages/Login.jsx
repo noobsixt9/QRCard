@@ -118,13 +118,10 @@
 //   );
 // };
 
-// export default Login;
-
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Header from "../Component/Header";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import RecaptchaWidget, { useRecaptchaScript } from "../Component/RecaptchaWidget";
 import "../CSS/Register.css";
 import { API_URL } from "../config/api";
 import { getDefaultRouteForRole } from "../utils/auth";
@@ -132,19 +129,12 @@ import { getDefaultRouteForRole } from "../utils/auth";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const recaptchaRef = useRef(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
-
-  useRecaptchaScript();
-
-  const getRecaptchaToken = () => recaptchaRef.current?.getToken() || "";
-
-  const resetRecaptcha = () => recaptchaRef.current?.reset();
 
   const redirectAfterLogin = (userRole) => {
     const role = userRole?.toUpperCase?.() || userRole;
@@ -171,7 +161,7 @@ const Login = () => {
     navigate(getDefaultRouteForRole(role), { replace: true });
   };
 
-  async function sendData(recaptchaToken) {
+  async function sendData() {
     try {
       const response = await fetch(
         `${API_URL}/auth/login`,
@@ -183,7 +173,6 @@ const Login = () => {
           body: JSON.stringify({
             email,
             password: password,
-            recaptchaToken,
           }),
         }
       );
@@ -211,11 +200,10 @@ const Login = () => {
     } catch (error) {
       console.error("Login error:", error.message);
       setError(error.message);
-      resetRecaptcha();
     }
   }
 
-  async function sendForgotPasswordRequest(emailToReset, recaptchaToken) {
+  async function sendForgotPasswordRequest(emailToReset) {
     const response = await fetch(`${API_URL}/auth/forgot-password`, {
       method: "POST",
       headers: {
@@ -223,7 +211,6 @@ const Login = () => {
       },
       body: JSON.stringify({
         email: emailToReset,
-        recaptchaToken,
       }),
     });
 
@@ -241,17 +228,10 @@ const Login = () => {
     setError("");
 
     if (email.trim()) {
-      const recaptchaToken = getRecaptchaToken();
-      if (!recaptchaToken) {
-        setError("Please complete the reCAPTCHA verification.");
-        return;
-      }
-
       try {
-        await sendForgotPasswordRequest(email.trim(), recaptchaToken);
+        await sendForgotPasswordRequest(email.trim());
       } catch (err) {
         setError(err.message);
-        resetRecaptcha();
       }
     } else {
       setShowForgotPassword(true);
@@ -267,17 +247,10 @@ const Login = () => {
       return;
     }
 
-    const recaptchaToken = getRecaptchaToken();
-    if (!recaptchaToken) {
-      setError("Please complete the reCAPTCHA verification.");
-      return;
-    }
-
     try {
-      await sendForgotPasswordRequest(resetEmail.trim(), recaptchaToken);
+      await sendForgotPasswordRequest(resetEmail.trim());
     } catch (err) {
       setError(err.message);
-      resetRecaptcha();
     }
   };
 
@@ -288,18 +261,6 @@ const Login = () => {
       setError("Please enter email and password.");
       return;
     }
-
-    const recaptchaToken = getRecaptchaToken();
-    if (!recaptchaToken) {
-      setError("Please complete the reCAPTCHA verification.");
-      return;
-    }
-
-    await sendData(recaptchaToken);
-    // // Demo admin login
-    // if (email === "admin@qrcard.com" && password === "admin123") {
-    //   localStorage.setItem("userRole", "admin");
-    //   localStorage.setItem("user", JSON.stringify({ name: "Admin" }));
 
     //   redirectAfterLogin("admin");
     //   return;
@@ -414,10 +375,7 @@ const Login = () => {
                     <a href="#forgot" onClick={handleForgotPasswordClick}>Forgot Password?</a>
                   </div>
 
-                  <RecaptchaWidget
-                    ref={recaptchaRef}
-                    widgetKey="login-recaptcha"
-                  />
+
 
                   {error && <p className="auth-error-message">{error}</p>}
 
@@ -433,12 +391,17 @@ const Login = () => {
                     {(!import.meta.env.VITE_GOOGLE_CLIENT_ID || 
                       import.meta.env.VITE_GOOGLE_CLIENT_ID.includes("your_google_client_id") || 
                       import.meta.env.VITE_GOOGLE_CLIENT_ID.includes("xxxxxxxxxxxxxxxx") || 
-                      import.meta.env.VITE_GOOGLE_CLIENT_ID.startsWith("1234567890-")) ? (
+                      import.meta.env.VITE_GOOGLE_CLIENT_ID === "1234567890-xxxxxxxxxxxxxxxx.apps.googleusercontent.com") ? (
                       <button
                         type="button"
                         className="btn-google-auth"
                         style={{ marginTop: "10px" }}
-                        onClick={() => handleGoogleLogin({ credential: "dev_mode_bypass_token" })}
+                        onClick={() => {
+                          const chosenEmail = prompt("Enter email address to simulate Continue with Google:", "user@example.com");
+                          if (chosenEmail) {
+                            handleGoogleLogin({ credential: chosenEmail });
+                          }
+                        }}
                       >
                         <svg
                           style={{ width: "16px", height: "16px" }}
@@ -493,10 +456,7 @@ const Login = () => {
                     />
                   </div>
 
-                  <RecaptchaWidget
-                    ref={recaptchaRef}
-                    widgetKey="forgot-recaptcha"
-                  />
+
 
                   {error && <p className="auth-error-message">{error}</p>}
 
@@ -522,6 +482,7 @@ const Login = () => {
           </div>
         </section>
       </main>
+
     </div>
   );
 };

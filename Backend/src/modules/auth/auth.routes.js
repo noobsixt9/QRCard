@@ -23,7 +23,6 @@ router.post(
   '/register/request-otp',
   authLimiter,
   validate(registerSchema),
-  verifyRecaptcha('SIGNUP'),
   authController.requestSignupOtp
 )
 router.post(
@@ -36,15 +35,14 @@ router.post(
   '/login',
   authLimiter,
   validate(loginSchema),
-  verifyRecaptcha('LOGIN'),
   authController.login
 )
 router.post('/google', authLimiter, authController.googleLogin)
+router.post('/google-check', authLimiter, authController.googleCheck)
 router.post(
   '/forgot-password',
   authLimiter,
   validate(forgotPasswordSchema),
-  verifyRecaptcha('FORGOT_PASSWORD'),
   authController.forgotPassword
 )
 router.post(

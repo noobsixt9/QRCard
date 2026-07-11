@@ -43,9 +43,11 @@
 
 .try-preview-layout {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 1.2fr 0.8fr;
   gap: 34px;
   align-items: start;
+  max-width: 1140px;
+  margin: 0 auto;
 }
 
 .try-preview-panel,
@@ -210,6 +212,9 @@
 }
 
 .live-card-preview {
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
   min-height: 290px;
   border-radius: 22px;
   padding: 30px;
@@ -220,8 +225,8 @@
 }
 
 .live-card-preview:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 34px 75px rgba(15, 23, 42, 0.12);
+  transform: scale(1.04);
+  box-shadow: 0 38px 80px rgba(15, 23, 42, 0.15);
 }
 
 .live-card-top {
@@ -439,41 +444,177 @@
 
 /* RESPONSIVE */
 
-@media (max-width: 1100px) {
+@media (max-width: 980px) {
   .try-preview-layout {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .try-preview-panel {
+    width: 100%;
+    max-width: 820px;
+    margin: 0 auto;
   }
 
   .try-preview-display {
     position: static;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
   }
-}
 
-@media (max-width: 768px) {
   .try-preview-section {
-    padding: 70px 24px;
+    padding: 56px 16px;
   }
 
   .try-preview-heading h2 {
-    font-size: 28px;
+    font-size: 26px;
   }
 
-  .preview-form-grid,
+  .try-preview-panel,
+  .try-preview-display {
+    padding: 28px 24px;
+    border-radius: 18px;
+  }
+
   .preview-control-grid {
     grid-template-columns: 1fr;
+    gap: 18px;
   }
 
-  .live-card-body {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .live-qr-box {
-    width: 100%;
-    height: 120px;
+  .live-card-preview {
+    padding: 28px 24px;
+    border-radius: 18px;
+    min-height: auto;
+    max-width: 100%;
   }
 
   .preview-action-buttons {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
+
+  @media (max-width: 480px) {
+    .preview-form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .live-card-top {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .live-card-body {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .live-info-list {
+      align-items: center;
+    }
+
+    .live-qr-box {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+    }
+  }
+}
+
+/* =========================
+   DARK THEME OVERRIDES
+========================= */
+html[data-theme="dark"] .try-preview-section {
+  background: var(--card-bg);
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .try-preview-heading h2,
+html[data-theme="dark"] .preview-form-header h3,
+html[data-theme="dark"] .preview-display-header h3,
+html[data-theme="dark"] .preview-input-group label,
+html[data-theme="dark"] .preview-control-block label,
+html[data-theme="dark"] .live-card-top h3,
+html[data-theme="dark"] .live-qr-box {
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .try-preview-panel,
+html[data-theme="dark"] .try-preview-display {
+  background: var(--page-bg);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .preview-input-group input {
+  background: var(--card-bg);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .preview-option-row button {
+  background: var(--card-bg);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .preview-option-row button:hover,
+html[data-theme="dark"] .preview-option-row button.active {
+  background: var(--page-bg);
+  border-color: #5b68e8;
+  color: #5b68e8;
+}
+
+html[data-theme="dark"] .live-card-preview {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .live-qr-box {
+  background: var(--page-bg);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .live-avatar {
+  background: var(--page-bg);
+}
+
+html[data-theme="dark"] .preview-action-buttons button {
+  background: var(--page-bg);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .preview-action-buttons .order-btn {
+  background: #5b68e8;
+  color: #ffffff;
+  border: none;
+}
+
+/* Ensure template custom colors still take priority over dark theme overrides */
+html[data-theme="dark"] .template-professional {
+  background: #111827 !important;
+  border-color: #1f2937 !important;
+}
+
+html[data-theme="dark"] .template-professional h3,
+html[data-theme="dark"] .template-professional strong {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .template-professional span,
+html[data-theme="dark"] .template-professional small {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .template-professional .live-qr-box {
+  background: #1f2937 !important;
+  border-color: #334155 !important;
 }

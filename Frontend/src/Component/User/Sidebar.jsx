@@ -22,14 +22,18 @@ const Sidebar = () => {
 
   return (
     <>
-      <button className="mobile-menu-btn" onClick={() => setIsOpen(true)}>
-        ☰
-      </button>
+      {!isOpen && (
+        <button className="mobile-menu-btn" onClick={() => setIsOpen(true)}>
+          ☰
+        </button>
+      )}
 
       {isOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
 
       <aside className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
-        <div className="sidebar-logo">QR CARD</div>
+        <NavLink to="/" className="sidebar-logo" onClick={closeSidebar}>
+          QR CARD
+        </NavLink>
 
         <nav className="sidebar-menu">
           <NavLink to="/dashboard" className="sidebar-link" onClick={closeSidebar}>

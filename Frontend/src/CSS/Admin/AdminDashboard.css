@@ -1,9 +1,9 @@
 .admin-dashboard-page {
   width: 100%;
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--page-bg);
   display: flex;
-  color: #111827;
+  color: var(--text-main);
 }
 
 /* =========================
@@ -13,8 +13,8 @@
 .admin-sidebar {
   width: 215px;
   min-height: 100vh;
-  background: #ffffff;
-  border-right: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border-right: 1px solid var(--border-color);
   padding: 34px 24px;
   display: flex;
   flex-direction: column;
@@ -57,7 +57,7 @@
   height: 44px;
   padding: 0 16px;
   border-radius: 8px;
-  color: #111827;
+  color: var(--text-main);
   text-decoration: none;
   font-size: 14px;
   font-weight: 650;
@@ -74,7 +74,7 @@
 
 .admin-link:hover,
 .admin-sidebar-link:hover {
-  background: #f1f5f9;
+  background: var(--page-bg);
   color: #5b68e8;
 }
 
@@ -189,8 +189,8 @@
 .admin-stat-card {
   min-height: 135px;
   padding: 28px 26px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   text-align: left;
   cursor: pointer;
@@ -251,8 +251,8 @@
 
 .recent-printing-card,
 .quick-admin-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 18px;
   padding: 38px;
 }
@@ -314,7 +314,7 @@
 }
 
 .admin-orders-table thead {
-  background: #f8fafc;
+  background: var(--page-bg);
 }
 
 .admin-orders-table th {
@@ -329,11 +329,11 @@
   padding: 20px 22px;
   font-size: 14px;
   font-weight: 800;
-  color: #111827;
+  color: var(--text-main);
 }
 
 .admin-orders-table tbody tr {
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .admin-orders-table tbody tr:last-child {
@@ -398,9 +398,9 @@
 .admin-action-list button {
   height: 56px;
   border-radius: 10px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #111827;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-main);
   font-size: 14px;
   font-weight: 900;
   cursor: pointer;

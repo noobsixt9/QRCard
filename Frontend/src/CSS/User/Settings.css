@@ -172,6 +172,9 @@
   cursor: pointer;
   flex-shrink: 0;
   transition: 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box !important;
 }
 
 .settings-toggle span {
@@ -181,6 +184,7 @@
   background: #ffffff;
   display: block;
   transition: 0.2s ease;
+  box-sizing: border-box !important;
 }
 
 .settings-toggle.active {

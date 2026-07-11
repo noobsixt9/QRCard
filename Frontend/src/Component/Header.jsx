@@ -14,12 +14,20 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
+  const handleLogoClick = (e) => {
+    closeMenu();
+    if (window.location.pathname === "/" || window.location.pathname === "") {
+      e.preventDefault();
+      window.location.reload();
+    }
+  };
+
   return (
     <header className="site-header">
       {/* Dark backdrop overlay when menu is open */}
       {isMenuOpen && <div className="menu-backdrop" onClick={closeMenu}></div>}
 
-      <a href="/#home" className="logo-container" onClick={closeMenu}>
+      <a href="/#home" className="logo-container" onClick={handleLogoClick}>
         <img src={logo} alt="QR Card" className="logo-img" />
       </a>
 
@@ -27,7 +35,7 @@ const Header = () => {
       <nav className={`site-nav ${isMenuOpen ? "active" : ""}`}>
         {/* Mobile Drawer Header (Logo on Left, Elegant close cross on Right) */}
         <div className="drawer-header">
-          <a href="/#home" className="logo-container" onClick={closeMenu}>
+          <a href="/#home" className="logo-container" onClick={handleLogoClick}>
             <img src={logo} alt="QR Card" className="logo-img drawer-logo" />
           </a>
           <button className="drawer-close-btn" onClick={closeMenu} aria-label="Close Menu">

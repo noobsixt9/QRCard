@@ -100,3 +100,409 @@ select {
   cursor: pointer;
   font-weight: 600;
 }
+
+/* ==========================================================================
+   GLOBAL DARK MODE OVERRIDES FOR USER & ADMIN PAGES
+   ========================================================================= */
+html[data-theme="dark"] .dashboard-page,
+html[data-theme="dark"] .dashboard-main,
+html[data-theme="dark"] .digital-profile-page,
+html[data-theme="dark"] .digital-profile-content,
+html[data-theme="dark"] .qr-codes-page,
+html[data-theme="dark"] .qr-codes-main,
+html[data-theme="dark"] .ai-bio-page,
+html[data-theme="dark"] .ai-bio-main,
+html[data-theme="dark"] .card-design-page,
+html[data-theme="dark"] .card-design-main,
+html[data-theme="dark"] .orders-page,
+html[data-theme="dark"] .orders-main,
+html[data-theme="dark"] .printing-orders-page,
+html[data-theme="dark"] .printing-orders-main,
+html[data-theme="dark"] .settings-page,
+html[data-theme="dark"] .settings-main,
+html[data-theme="dark"] .admin-page,
+html[data-theme="dark"] .admin-page-main,
+html[data-theme="dark"] .qr-page,
+html[data-theme="dark"] .qr-main,
+html[data-theme="dark"] .qr-preview-box,
+html[data-theme="dark"] .generated-bio-box,
+html[data-theme="dark"] .live-qr-box {
+  background: var(--page-bg) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+html[data-theme="dark"] .qr-option-card,
+html[data-theme="dark"] .qr-preview-card,
+html[data-theme="dark"] .bio-details-card,
+html[data-theme="dark"] .generated-bio-card,
+html[data-theme="dark"] .bio-suggestion-card,
+html[data-theme="dark"] .design-editor-card,
+html[data-theme="dark"] .design-preview-card,
+html[data-theme="dark"] .orders-card,
+html[data-theme="dark"] .order-card,
+html[data-theme="dark"] .order-detail-card,
+html[data-theme="dark"] .printing-form-card,
+html[data-theme="dark"] .printing-summary-card,
+html[data-theme="dark"] .settings-card,
+html[data-theme="dark"] .settings-save-card,
+html[data-theme="dark"] .dashboard-stat-card,
+html[data-theme="dark"] .dashboard-action-card,
+html[data-theme="dark"] .profile-form-card,
+html[data-theme="dark"] .profile-status-card,
+html[data-theme="dark"] .ai-suggestion-card,
+html[data-theme="dark"] .form-box,
+html[data-theme="dark"] .admin-panel,
+html[data-theme="dark"] .recent-printing-card,
+html[data-theme="dark"] .quick-admin-card,
+html[data-theme="dark"] .live-card-preview {
+  background: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] label,
+html[data-theme="dark"] .qr-header h1,
+html[data-theme="dark"] .qr-option-card h2,
+html[data-theme="dark"] .qr-preview-info h3,
+html[data-theme="dark"] .qr-preview-box span,
+html[data-theme="dark"] .ai-bio-header h1,
+html[data-theme="dark"] .bio-details-card h2,
+html[data-theme="dark"] .generated-bio-card h2,
+html[data-theme="dark"] .bio-suggestion-card h2,
+html[data-theme="dark"] .bio-form-group label,
+html[data-theme="dark"] .tone-section label,
+html[data-theme="dark"] .generated-bio-box p,
+html[data-theme="dark"] .card-design-header h1,
+html[data-theme="dark"] .design-editor-card h2,
+html[data-theme="dark"] .design-preview-card h2,
+html[data-theme="dark"] .editor-section-title,
+html[data-theme="dark"] .orders-header h1,
+html[data-theme="dark"] .orders-table th,
+html[data-theme="dark"] .orders-table td,
+html[data-theme="dark"] .order-id,
+html[data-theme="dark"] .order-date,
+html[data-theme="dark"] .order-details h4,
+html[data-theme="dark"] .order-detail-row span,
+html[data-theme="dark"] .order-detail-row strong,
+html[data-theme="dark"] .no-orders h3,
+html[data-theme="dark"] .search-wrapper input,
+html[data-theme="dark"] .preview-input-group label,
+html[data-theme="dark"] .preview-control-block label,
+html[data-theme="dark"] .live-card-top h3,
+html[data-theme="dark"] .live-info-list span,
+html[data-theme="dark"] .live-qr-box strong,
+html[data-theme="dark"] .settings-header h1,
+html[data-theme="dark"] .settings-card h2,
+html[data-theme="dark"] .settings-form-group label,
+html[data-theme="dark"] .default-qr-section label,
+html[data-theme="dark"] .setting-row h3,
+html[data-theme="dark"] .dashboard-header h1,
+html[data-theme="dark"] .stat-info h3,
+html[data-theme="dark"] .action-info h3,
+html[data-theme="dark"] .profile-status-info h3,
+html[data-theme="dark"] .suggestion-list li,
+html[data-theme="dark"] .admin-header h1,
+html[data-theme="dark"] .admin-stat-card h2,
+html[data-theme="dark"] .recent-printing-card h2,
+html[data-theme="dark"] .quick-admin-card h2,
+html[data-theme="dark"] .admin-orders-table th,
+html[data-theme="dark"] .admin-orders-table td {
+  color: var(--text-main) !important;
+}
+
+html[data-theme="dark"] .qr-header p,
+html[data-theme="dark"] .qr-option-card p,
+html[data-theme="dark"] .qr-preview-info p,
+html[data-theme="dark"] .ai-bio-header p,
+html[data-theme="dark"] .card-subtitle,
+html[data-theme="dark"] .bio-form-group input::placeholder,
+html[data-theme="dark"] .bio-form-group textarea::placeholder,
+html[data-theme="dark"] .bio-suggestion-card li,
+html[data-theme="dark"] .card-design-header p,
+html[data-theme="dark"] .design-editor-card p,
+html[data-theme="dark"] .orders-header p,
+html[data-theme="dark"] .order-card p,
+html[data-theme="dark"] .order-detail-row p,
+html[data-theme="dark"] .search-wrapper input::placeholder,
+html[data-theme="dark"] .preview-form-header p,
+html[data-theme="dark"] .preview-display-header p,
+html[data-theme="dark"] .live-card-top p,
+html[data-theme="dark"] .live-info-list i,
+html[data-theme="dark"] .live-qr-box small,
+html[data-theme="dark"] .settings-header p,
+html[data-theme="dark"] .settings-card-subtitle,
+html[data-theme="dark"] .setting-row p,
+html[data-theme="dark"] .dashboard-header p,
+html[data-theme="dark"] .stat-info p,
+html[data-theme="dark"] .action-info p,
+html[data-theme="dark"] .profile-status-info p,
+html[data-theme="dark"] .suggestion-list li::before,
+html[data-theme="dark"] .admin-header p,
+html[data-theme="dark"] .admin-stat-card p,
+html[data-theme="dark"] .admin-card-title-row p,
+html[data-theme="dark"] .admin-orders-table th {
+  color: var(--text-light) !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select,
+html[data-theme="dark"] .settings-form-group input,
+html[data-theme="dark"] .form-group input,
+html[data-theme="dark"] .form-group textarea,
+html[data-theme="dark"] .form-group select,
+html[data-theme="dark"] .admin-input-group input,
+html[data-theme="dark"] .admin-input-group textarea,
+html[data-theme="dark"] .admin-input-group select,
+html[data-theme="dark"] .bio-form-group input,
+html[data-theme="dark"] .bio-form-group textarea {
+  background: var(--input-bg) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Specific elements: list items and tables */
+html[data-theme="dark"] .orders-table,
+html[data-theme="dark"] .orders-table tr,
+html[data-theme="dark"] .orders-table th,
+html[data-theme="dark"] .orders-table td,
+html[data-theme="dark"] .admin-orders-table,
+html[data-theme="dark"] .admin-orders-table tr,
+html[data-theme="dark"] .admin-orders-table th,
+html[data-theme="dark"] .admin-orders-table td {
+  background: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+html[data-theme="dark"] .orders-table thead,
+html[data-theme="dark"] .admin-orders-table thead {
+  background: var(--page-bg) !important;
+}
+
+html[data-theme="dark"] .option-group button,
+html[data-theme="dark"] .default-qr-options button,
+html[data-theme="dark"] .preview-option-row button,
+html[data-theme="dark"] .admin-action-list button,
+html[data-theme="dark"] .tone-pill,
+html[data-theme="dark"] .secondary-bio-btn,
+html[data-theme="dark"] .outline-btn {
+  background: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+html[data-theme="dark"] .option-group button.active,
+html[data-theme="dark"] .default-qr-options button.active,
+html[data-theme="dark"] .preview-option-row button.active,
+html[data-theme="dark"] .admin-action-list button.active,
+html[data-theme="dark"] .tone-pill.active {
+  background: #5b68e8 !important;
+  color: #ffffff !important;
+  border-color: #5b68e8 !important;
+}
+
+html[data-theme="dark"] .qr-box-inner,
+html[data-theme="dark"] .qr-code-display {
+  background: #ffffff !important; /* Keep QR code background white so it scans! */
+}
+
+/* Ensure rounded containers correctly clip their contents (images, borders, absolute buttons) */
+.qr-preview-box,
+.live-qr-box,
+.user-avatar,
+.live-avatar,
+.avatar,
+.card-preview,
+.template-mini-preview,
+.f-card,
+.how-step-card,
+.landing-template-card,
+.landing-pricing-card,
+.dashboard-stat-card,
+.dashboard-action-card,
+.profile-form-card,
+.profile-status-card,
+.ai-suggestion-card,
+.settings-card,
+.settings-save-card,
+.admin-panel,
+.recent-printing-card,
+.quick-admin-card {
+  overflow: hidden;
+}
+
+/* Google Password Modal styling */
+.google-password-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.25s ease;
+}
+
+.google-password-modal {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[data-theme="dark"] .google-password-modal {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.google-password-modal h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 12px;
+}
+
+html[data-theme="dark"] .google-password-modal h3 {
+  color: #f1f5f9;
+}
+
+.google-password-modal .modal-email {
+  display: inline-block;
+  background: rgba(91, 104, 232, 0.08);
+  color: #5b68e8;
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+
+html[data-theme="dark"] .google-password-modal .modal-email {
+  background: rgba(91, 104, 232, 0.16);
+  color: #818cf8;
+}
+
+.google-password-modal .modal-description {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+html[data-theme="dark"] .google-password-modal .modal-description {
+  color: #94a3b8;
+}
+
+.google-password-modal .input-group {
+  margin-bottom: 20px;
+}
+
+.google-password-modal .input-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+html[data-theme="dark"] .google-password-modal .input-group label {
+  color: #cbd5e1;
+}
+
+.google-password-modal .input-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+html[data-theme="dark"] .google-password-modal .input-group input {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+.google-password-modal .input-group input:focus {
+  border-color: #5b68e8;
+  box-shadow: 0 0 0 3px rgba(91, 104, 232, 0.15);
+}
+
+.google-password-modal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.google-password-modal .btn-modal-cancel {
+  padding: 12px 20px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+html[data-theme="dark"] .google-password-modal .btn-modal-cancel {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+.google-password-modal .btn-modal-cancel:hover {
+  background: #f1f5f9;
+}
+
+html[data-theme="dark"] .google-password-modal .btn-modal-cancel:hover {
+  background: #334155;
+}
+
+.google-password-modal .btn-modal-submit {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  background: #5b68e8;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.google-password-modal .btn-modal-submit:hover {
+  background: #4753d4;
+  box-shadow: 0 4px 12px rgba(91, 104, 232, 0.25);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
