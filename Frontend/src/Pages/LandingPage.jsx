@@ -59,16 +59,16 @@ const LandingPage = () => {
                   <span>Backend Developer</span>
                 </div>
               </div>
+              <div className="card-footer-row">
+                <div className="badge-stack">
+                  <span className="badge">Online</span>
+                  <span className="badge purple">vCard</span>
+                </div>
 
-              <div className="badge-stack">
-                <span className="badge">Online</span>
-                <span className="badge purple">vCard</span>
-              </div>
-
-              <div className="qr-box">
-                <span>QR</span>
-              </div>
-            </div>
+                <div className="qr-box">
+                  <span>QR</span>
+                </div>
+              </div>            </div>
           </div>
         </section>
 

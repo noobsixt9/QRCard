@@ -32,10 +32,24 @@ const syncSchema = z.object({
     .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
 })
 
+const verifyOtpSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  code: z.string().length(6, 'OTP code must be exactly 6 digits'),
+  purpose: z.enum(['REGISTRATION', 'PASSWORD_RESET']),
+  recaptchaToken: z.string().min(1, 'reCAPTCHA verification is required'),
+})
+
+const resendOtpSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  purpose: z.enum(['REGISTRATION', 'PASSWORD_RESET']),
+})
+
 module.exports = {
   registerSchema,
   loginSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   syncSchema,
+  verifyOtpSchema,
+  resendOtpSchema,
 }

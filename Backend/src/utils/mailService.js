@@ -1,5 +1,5 @@
 const { getResend } = require('../config/mailer')
-const { orderReceiptEmail, vendorOrderEmail } = require('./emailTemplates')
+const { orderReceiptEmail, vendorOrderEmail, otpEmailTemplate } = require('./emailTemplates')
 
 async function sendOrderConfirmationEmail(order, user, pdfBuffer) {
   const resend = getResend()
@@ -35,4 +35,37 @@ async function sendVendorOrderEmail(order, user, vendor, pdfBuffer) {
   })
 }
 
-module.exports = { sendOrderConfirmationEmail, sendVendorOrderEmail }
+async function sendOtpEmail(email, code, purpose) {
+  // Always log OTP in development mode for easy bypass/testing
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`\n==================================================`);
+    console.log(`🔑 [DEV MODE] OTP code for ${email} is: ${code}`);
+    console.log(`==================================================\n`);
+  }
+
+  const resend = getResend()
+  if (!resend) {
+    console.warn(`Resend not configured — OTP code for ${email} is: ${code}`)
+    return
+  }
+
+  const subjectText = purpose === 'REGISTRATION' ? 'Email Verification OTP' : 'Password Reset OTP';
+
+  try {
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM || 'noreply@qrcard.com',
+      to: email,
+      subject: `QRCard - ${subjectText}`,
+      html: otpEmailTemplate(code, purpose),
+    })
+  } catch (error) {
+    console.error(`Resend API error sending OTP to ${email}:`, error);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`⚠️ Email sending failed, but you can use the OTP code above in development mode.`);
+    } else {
+      throw error;
+    }
+  }
+}
+
+module.exports = { sendOrderConfirmationEmail, sendVendorOrderEmail, sendOtpEmail }

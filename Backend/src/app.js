@@ -19,9 +19,22 @@ const adminRoutes = require('./modules/admin/admin.routes')
 const app = express()
 
 app.use(helmet())
+const allowedOrigins = [
+  process.env.CLIENT_BASE_URL,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175'
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_BASE_URL || 'http://localhost:3000',
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost:')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 )

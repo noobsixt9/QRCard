@@ -47,7 +47,7 @@ async function listUsers(query) {
       take: limit,
       orderBy: { created_at: 'desc' },
       include: {
-        profile: { select: { completeness_score: true } },
+        profile: { select: { completeness_score: true, full_name: true, job_title: true } },
         _count: { select: { orders: true } },
       },
     }),
@@ -61,6 +61,8 @@ async function listUsers(query) {
     role: u.role,
     is_active: u.is_active,
     profile_completion: u.profile?.completeness_score ?? 0,
+    full_name: u.profile?.full_name || "",
+    job_title: u.profile?.job_title || "",
     order_count: u._count.orders,
     created_at: u.created_at,
   }))

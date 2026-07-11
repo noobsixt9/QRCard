@@ -90,6 +90,15 @@ const PublicProfile = () => {
       lines.push(`NOTE:${escapeVCard(profile.bio.slice(0, 500))}`);
     }
 
+    // Export social links to vCard
+    if (profile.social_links) {
+      Object.entries(profile.social_links).forEach(([key, value]) => {
+        if (value) {
+          lines.push(`X-SOCIALPROFILE;TYPE=${key}:${escapeVCard(value)}`);
+        }
+      });
+    }
+
     lines.push("END:VCARD");
     const vcardContent = lines.join("\n");
 
@@ -199,6 +208,56 @@ const PublicProfile = () => {
                 <div className="contact-details">
                   <span className="contact-label">Website</span>
                   <span className="contact-value">{profile.website.replace(/^https?:\/\/(www\.)?/, "")}</span>
+                </div>
+              </a>
+            )}
+
+            {profile.social_links?.linkedin && (
+              <a href={profile.social_links.linkedin} target="_blank" rel="noopener noreferrer" className="contact-item">
+                <span className="contact-icon">🔗</span>
+                <div className="contact-details">
+                  <span className="contact-label">LinkedIn</span>
+                  <span className="contact-value">View LinkedIn Profile</span>
+                </div>
+              </a>
+            )}
+
+            {profile.social_links?.github && (
+              <a href={profile.social_links.github} target="_blank" rel="noopener noreferrer" className="contact-item">
+                <span className="contact-icon">💻</span>
+                <div className="contact-details">
+                  <span className="contact-label">GitHub</span>
+                  <span className="contact-value">View GitHub Profile</span>
+                </div>
+              </a>
+            )}
+
+            {profile.social_links?.twitter && (
+              <a href={profile.social_links.twitter} target="_blank" rel="noopener noreferrer" className="contact-item">
+                <span className="contact-icon">🐦</span>
+                <div className="contact-details">
+                  <span className="contact-label">Twitter / X</span>
+                  <span className="contact-value">View Twitter Profile</span>
+                </div>
+              </a>
+            )}
+
+            {profile.social_links?.instagram && (
+              <a href={profile.social_links.instagram} target="_blank" rel="noopener noreferrer" className="contact-item">
+                <span className="contact-icon">📸</span>
+                <div className="contact-details">
+                  <span className="contact-label">Instagram</span>
+                  <span className="contact-value">View Instagram Profile</span>
+                </div>
+              </a>
+            )}
+
+            {profile.social_links?.facebook && (
+              <a href={profile.social_links.facebook} target="_blank" rel="noopener noreferrer" className="contact-item">
+                <span className="contact-icon">👥</span>
+                <div className="contact-details">
+                  <span className="contact-label">Facebook</span>
+                  <span className="contact-value">View Facebook Profile</span>
                 </div>
               </a>
             )}

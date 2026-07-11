@@ -90,4 +90,48 @@ async function me(req, res, next) {
   }
 }
 
-module.exports = { register, login, forgotPassword, resetPassword, sync, me }
+async function verifyOTP(req, res, next) {
+  try {
+    const result = await authService.verifyOTP(req.body)
+    res.status(200).json({
+      success: true,
+      message: 'OTP verification successful',
+      data: result,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function resendOTP(req, res, next) {
+  try {
+    const { email, purpose } = req.body
+    await authService.sendOTP(email, purpose)
+    res.status(200).json({
+      success: true,
+      message: 'OTP resent successfully',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function googleLogin(req, res, next) {
+  try {
+    const { credential } = req.body
+    if (!credential) {
+      return res.status(400).json({ success: false, message: 'Google credential token is required' })
+    }
+
+    const result = await authService.googleLogin(credential)
+    res.status(200).json({
+      success: true,
+      message: 'Google login successful',
+      data: result,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { register, login, forgotPassword, resetPassword, sync, me, verifyOTP, resendOTP, googleLogin }
