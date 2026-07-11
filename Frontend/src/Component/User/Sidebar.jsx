@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { clearAuthSession } from "../../utils/auth";
 import "../../CSS/User/Sidebar.css";
 import ThemeToggle from "../ThemeToggle";
 
@@ -16,13 +17,8 @@ const Sidebar = () => {
 
     if (!confirmLogout) return;
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("userRole");
-
-    sessionStorage.clear();
-
-    navigate("/login");
+    clearAuthSession();
+    navigate("/login", { replace: true });
   };
 
   return (

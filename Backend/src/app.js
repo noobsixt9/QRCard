@@ -17,23 +17,25 @@ const orderRoutes = require('./modules/orders/order.routes')
 const adminRoutes = require('./modules/admin/admin.routes')
 
 const app = express()
-
-app.use(helmet())
-const allowedOrigins = [
+const allowedOrigins = new Set([
   process.env.CLIENT_BASE_URL,
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
+  'http://localhost:3003',
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175'
-].filter(Boolean);
+].filter(Boolean))
 
+app.use(helmet())
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost:')) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin) || origin.startsWith('http://localhost:')) {
+        return callback(null, true)
       }
+      return callback(new Error(`CORS blocked for origin: ${origin}`))
     },
     credentials: true,
   })

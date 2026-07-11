@@ -51,4 +51,14 @@ function otpEmailTemplate(code, purpose) {
   `
 }
 
-module.exports = { orderReceiptEmail, vendorOrderEmail, otpEmailTemplate }
+function signupOtpEmail(otp, expiresMinutes) {
+  return `
+    <h2>Verify your QRCard account</h2>
+    <p>Use this one-time code to complete your signup:</p>
+    <p style="font-size: 28px; font-weight: bold; letter-spacing: 4px;">${otp}</p>
+    <p>This code expires in ${expiresMinutes} minutes.</p>
+    <p>If you did not request this, you can ignore this email.</p>
+  `
+}
+
+module.exports = { orderReceiptEmail, vendorOrderEmail, otpEmailTemplate, signupOtpEmail }

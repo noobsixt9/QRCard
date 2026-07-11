@@ -23,24 +23,13 @@ const OTPVerification = () => {
 
   const inputRefs = useRef([]);
 
-  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"; // Fallback to Google test key
-
   useEffect(() => {
-    // Dynamically load Google reCAPTCHA v2 script
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js";
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-
-    // Countdown timer for resending OTP
     let timer;
     if (resendCountdown > 0) {
       timer = setTimeout(() => setResendCountdown(resendCountdown - 1), 1000);
     }
 
     return () => {
-      document.body.removeChild(script);
       if (timer) clearTimeout(timer);
     };
   }, [resendCountdown]);
@@ -85,39 +74,30 @@ const OTPVerification = () => {
       return;
     }
 
-    // Get reCAPTCHA response token
-    const recaptchaToken = window.grecaptcha?.getResponse();
-    if (!recaptchaToken) {
-      setError("Please complete the reCAPTCHA verification.");
-      return;
-    }
-
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/auth/verify-otp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          code: otpCode,
-          purpose,
-          recaptchaToken,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Verification failed");
-      }
-
-      setSuccess("OTP Verified Successfully!");
-      
       if (purpose === "REGISTRATION") {
-        // Save token and login user
+        const response = await fetch(`${API_URL}/auth/register/verify-otp`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            otp: otpCode,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Verification failed");
+        }
+
+        setSuccess("OTP Verified Successfully!");
+        sessionStorage.removeItem("signupPending");
+
         const token = result.data?.token;
         const user = result.data?.user;
         if (token && user) {
@@ -125,51 +105,36 @@ const OTPVerification = () => {
           localStorage.setItem("user", JSON.stringify(user));
           localStorage.setItem("userRole", user.role?.toLowerCase());
         }
+
         setTimeout(() => {
           navigate("/dashboard");
         }, 1500);
-      } else if (purpose === "PASSWORD_RESET") {
-        // Show password reset form
-        setResetToken(result.data?.reset_token);
-        setIsResetFlow(true);
+        return;
       }
+
+      if (purpose === "PASSWORD_RESET") {
+        throw new Error("Password reset OTP verification is not available yet.");
+      }
+
+      throw new Error("Unsupported verification purpose.");
     } catch (err) {
       setError(err.message);
-      // Reset reCAPTCHA widget
-      window.grecaptcha?.reset();
     } finally {
       setLoading(false);
     }
   };
 
-  const handleResend = async () => {
+  const handleResend = () => {
     setError("");
     setSuccess("");
-    setOtp(["", "", "", "", "", ""]);
-    window.grecaptcha?.reset();
 
-    try {
-      const response = await fetch(`${API_URL}/auth/resend-otp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          purpose,
-        }),
-      });
+    if (purpose === "REGISTRATION") {
+      navigate("/register");
+      return;
+    }
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to resend OTP");
-      }
-
-      setSuccess("A new OTP has been sent to your email.");
-      setResendCountdown(60);
-    } catch (err) {
-      setError(err.message);
+    if (purpose === "PASSWORD_RESET") {
+      navigate("/login");
     }
   };
 
@@ -226,7 +191,7 @@ const OTPVerification = () => {
         <section className="auth-sidebar">
           <h2>Security Verification</h2>
           <p>
-            We take your security seriously. Please complete the OTP and reCAPTCHA checks to continue.
+            Enter the verification code sent to your email to complete signup.
           </p>
           <div className="mini-card-preview-login">
             <h4>Update once. Share anytime.</h4>
@@ -259,10 +224,6 @@ const OTPVerification = () => {
                     ))}
                   </div>
 
-                  <div className="recaptcha-outer-container">
-                    <div className="g-recaptcha" data-sitekey={siteKey}></div>
-                  </div>
-
                   {error && <p className="auth-error-message">{error}</p>}
                   {success && <p className="auth-success-message">{success}</p>}
 
@@ -285,7 +246,9 @@ const OTPVerification = () => {
                         onClick={handleResend}
                         className="btn-resend-otp"
                       >
-                        Resend OTP
+                        {purpose === "REGISTRATION"
+                          ? "Back to Register"
+                          : "Back to Login"}
                       </button>
                     )}
                   </div>
