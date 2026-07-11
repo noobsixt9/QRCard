@@ -206,10 +206,10 @@ const PublicProfile = () => {
 
           <div className="actions-container">
             <button className="add-contact-btn" onClick={downloadVCard}>
-              <span>📥</span> Add to Contacts
+              <span></span> Add to Contacts
             </button>
             <button className="share-btn" onClick={handleShare}>
-              <span>🔗</span> Share Profile
+              <span></span> Share Profile
             </button>
           </div>
         </div>

@@ -65,19 +65,21 @@
 
 // export default Register;
 
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import Header from "../Component/Header";
 import { NavLink, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import RecaptchaWidget, { useRecaptchaScript } from "../Component/RecaptchaWidget";
 import "../CSS/Register.css";
 import { API_URL } from "../config/api";
 
 const Register = () => {
   const navigate = useNavigate();
-
+  const recaptchaRef = useRef(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
+    username: "",
     email: "",
     phone: "",
     password: "",
@@ -85,8 +87,11 @@ const Register = () => {
 
   const [error, setError] = useState("");
 
+  useRecaptchaScript();
+
   const isFormValid =
     formData.fullName.trim() &&
+    formData.username.trim() &&
     formData.email.trim() &&
     formData.phone.trim() &&
     formData.password.trim();
@@ -112,34 +117,37 @@ const Register = () => {
       return;
     }
 
+    if (name === "username") {
+      setFormData({
+        ...formData,
+        username: value.replace(/[^a-zA-Z0-9_]/g, "").slice(0, 20),
+      });
+      return;
+    }
+
     setFormData({
       ...formData,
       [name]: value,
     });
   };
-async function sendData() {
+async function sendData(recaptchaToken) {
   try {
-    const username = formData.fullName
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "_")
-      .replace(/[^a-z0-9_]/g, "")
-      .slice(0, 20);
+    const username = formData.username.trim();
+    const email = formData.email.trim();
+    const payload = {
+      username,
+      email,
+      password: formData.password,
+      recaptchaToken,
+    };
 
-    const response = await fetch(
-      `${API_URL}/auth/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          email: formData.email.trim(),
-          password: formData.password,
-        }),
-      }
-    );
+    const response = await fetch(`${API_URL}/auth/register/request-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
     const result = await response.json();
 
@@ -147,27 +155,49 @@ async function sendData() {
       throw new Error(result.message || "Registration failed.");
     }
 
-    console.log("Registration successful:", result);
-    navigate(`/verify-otp?email=${encodeURIComponent(formData.email.trim())}&purpose=REGISTRATION`);
+    sessionStorage.setItem("signupPending", JSON.stringify({
+      username,
+      email,
+      password: formData.password,
+    }));
+    navigate(`/verify-otp?email=${encodeURIComponent(email)}&purpose=REGISTRATION`);
   } catch (error) {
     console.error("Registration error:", error.message);
     setError(error.message);
+    recaptchaRef.current?.reset();
   }
 }
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("Test")
 
     if (!isFormValid) {
       setError("Please fill all required fields.");
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters.");
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters.");
       return;
     }
-    await sendData();
+
+    const username = formData.username.trim();
+    if (username.length < 3) {
+      setError("Username must be at least 3 characters.");
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      setError("Username can only contain letters, numbers, and underscores.");
+      return;
+    }
+
+    const recaptchaToken = recaptchaRef.current?.getToken();
+    if (!recaptchaToken) {
+      setError("Please complete the reCAPTCHA verification.");
+      return;
+    }
+
+    await sendData(recaptchaToken);
 
     // localStorage.setItem("userRole", "user");
     // localStorage.setItem(
@@ -273,6 +303,22 @@ async function sendData() {
               </div>
 
               <div className="input-group">
+                <label>Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Choose a unique username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  maxLength="20"
+                  required
+                />
+                <span className="input-hint">
+                  Your public profile will be at /u/{formData.username || "username"}
+                </span>
+              </div>
+
+              <div className="input-group">
                 <label>Email Address</label>
                 <input
                   type="email"
@@ -309,7 +355,7 @@ async function sendData() {
                 />
               </div>
 
-
+              <RecaptchaWidget ref={recaptchaRef} widgetKey="register-recaptcha" />
 
               {error && <p className="auth-error-message">{error}</p>}
 

@@ -1,5 +1,5 @@
-import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { clearAuthSession } from "../../utils/auth";
 import "../../CSS/Admin/AdminDashboard.css";
 
 const AdminSidebar = () => {
@@ -9,12 +9,8 @@ const AdminSidebar = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (!confirmLogout) return;
 
-    localStorage.removeItem("user");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("token");
-    sessionStorage.clear();
-
-    navigate("/login");
+    clearAuthSession();
+    navigate("/login", { replace: true });
   };
 
   return (

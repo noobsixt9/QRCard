@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./CSS/App.css";
-import Register from './Pages/Register';
-import Login from './Pages/Login';
+import Register from "./Pages/Register";
+import Login from "./Pages/Login";
 import OTPVerification from "./Pages/OTPVerification";
 import ErrorPage from "./Pages/ErrorPage";
 import LandingPage from "./Pages/LandingPage";
@@ -14,8 +14,6 @@ import Orders from "./Pages/User/Orders";
 import PrintingOrders from "./Pages/User/PrintingOrders";
 import Settings from "./Pages/User/Settings";
 import PublicProfile from "./Pages/PublicProfile";
-
-
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import AdminUsers from "./Pages/Admin/Users";
 import AdminProfiles from "./Pages/Admin/Profiles";
@@ -23,42 +21,159 @@ import AdminOrders from "./Pages/Admin/Orders";
 import AdminDesignRequests from "./Pages/Admin/DesignRequests";
 import AdminVendors from "./Pages/Admin/Vendors";
 import AdminSettings from "./Pages/Admin/Settings";
-
-
-
+import ProtectedRoute from "./Component/ProtectedRoute";
+import GuestRoute from "./Component/GuestRoute";
 
 const App = () => {
   return (
     <BrowserRouter>
-
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/register"
+          element={
+            <GuestRoute>
+              <Register />
+            </GuestRoute>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <GuestRoute>
+              <Login />
+            </GuestRoute>
+          }
+        />
         <Route path="/verify-otp" element={<OTPVerification />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/digital-profile" element={<DigitalProfile />} />
         <Route path="/u/:username" element={<PublicProfile />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute roles={["USER", "ADMIN"]}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/digital-profile"
+          element={
+            <ProtectedRoute roles={["USER", "ADMIN"]}>
+              <DigitalProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/qr-codes"
+          element={
+            <ProtectedRoute roles={["USER", "ADMIN"]}>
+              <QRCodes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ai-bio"
+          element={
+            <ProtectedRoute roles={["USER", "ADMIN"]}>
+              <AIBio />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/card-design"
+          element={
+            <ProtectedRoute roles={["USER", "ADMIN"]}>
+              <CardDesign />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute roles={["USER", "ADMIN"]}>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/printing-order"
+          element={
+            <ProtectedRoute roles={["USER", "ADMIN"]}>
+              <PrintingOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute roles={["USER", "ADMIN"]}>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-users"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-profiles"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminProfiles />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-orders"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-design-requests"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminDesignRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-vendors"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminVendors />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-settings"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminSettings />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<ErrorPage />} />
-        <Route path="/qr-codes" element={<QRCodes />} />
-        <Route path="/ai-bio" element={<AIBio />} />
-        <Route path="/card-design" element={<CardDesign />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/printing-order" element={<PrintingOrders />} />
-        <Route path="/settings" element={<Settings />} />
-
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/admin-users" element={<AdminUsers />} />
-        <Route path="/admin-profiles" element={<AdminProfiles />} />
-        <Route path="/admin-orders" element={<AdminOrders />} />
-        <Route path="/admin-design-requests" element={<AdminDesignRequests />} />
-        <Route path="/admin-vendors" element={<AdminVendors />} />
-        <Route path="/admin-settings" element={<AdminSettings />} />
-
       </Routes>
-
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default App
+export default App;

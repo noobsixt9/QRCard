@@ -120,15 +120,19 @@
 
 // export default Login;
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Header from "../Component/Header";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import RecaptchaWidget, { useRecaptchaScript } from "../Component/RecaptchaWidget";
 import "../CSS/Register.css";
 import { API_URL } from "../config/api";
+import { getDefaultRouteForRole } from "../utils/auth";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const recaptchaRef = useRef(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -136,23 +140,38 @@ const Login = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
 
-  const redirectAfterLogin = (role = "user") => {
+  useRecaptchaScript();
+
+  const getRecaptchaToken = () => recaptchaRef.current?.getToken() || "";
+
+  const resetRecaptcha = () => recaptchaRef.current?.reset();
+
+  const redirectAfterLogin = (userRole) => {
+    const role = userRole?.toUpperCase?.() || userRole;
+    const fromPath = location.state?.from;
+
+    if (fromPath && !["/login", "/register"].includes(fromPath)) {
+      if (fromPath.startsWith("/admin") && role !== "ADMIN") {
+        navigate(getDefaultRouteForRole(role), { replace: true });
+        return;
+      }
+
+      navigate(fromPath, { replace: true });
+      return;
+    }
+
     const redirectPath = localStorage.getItem("afterLoginRedirect");
 
     if (redirectPath) {
       localStorage.removeItem("afterLoginRedirect");
-      navigate(redirectPath);
+      navigate(redirectPath, { replace: true });
       return;
     }
 
-    if (role === "admin") {
-      navigate("/admin-dashboard");
-    } else {
-      navigate("/dashboard");
-    }
+    navigate(getDefaultRouteForRole(role), { replace: true });
   };
 
-  async function sendData() {
+  async function sendData(recaptchaToken) {
     try {
       const response = await fetch(
         `${API_URL}/auth/login`,
@@ -164,6 +183,7 @@ const Login = () => {
           body: JSON.stringify({
             email,
             password: password,
+            recaptchaToken,
           }),
         }
       );
@@ -187,17 +207,33 @@ const Login = () => {
         localStorage.setItem("userRole", user.role?.toLowerCase());
       }
 
-      if (user?.role === "USER") {
-        navigate("/dashboard");
-      } else if (user?.role === "ADMIN") {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/");
-      }
+      redirectAfterLogin(user?.role);
     } catch (error) {
       console.error("Login error:", error.message);
       setError(error.message);
+      resetRecaptcha();
     }
+  }
+
+  async function sendForgotPasswordRequest(emailToReset, recaptchaToken) {
+    const response = await fetch(`${API_URL}/auth/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailToReset,
+        recaptchaToken,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to send reset OTP.");
+    }
+
+    navigate(`/verify-otp?email=${encodeURIComponent(emailToReset)}&purpose=PASSWORD_RESET`);
   }
 
   const handleForgotPasswordClick = async (e) => {
@@ -205,24 +241,17 @@ const Login = () => {
     setError("");
 
     if (email.trim()) {
+      const recaptchaToken = getRecaptchaToken();
+      if (!recaptchaToken) {
+        setError("Please complete the reCAPTCHA verification.");
+        return;
+      }
+
       try {
-        const response = await fetch(`${API_URL}/auth/forgot-password`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: email.trim() }),
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(result.message || "Failed to send reset OTP.");
-        }
-
-        navigate(`/verify-otp?email=${encodeURIComponent(email.trim())}&purpose=PASSWORD_RESET`);
+        await sendForgotPasswordRequest(email.trim(), recaptchaToken);
       } catch (err) {
         setError(err.message);
+        resetRecaptcha();
       }
     } else {
       setShowForgotPassword(true);
@@ -238,24 +267,17 @@ const Login = () => {
       return;
     }
 
+    const recaptchaToken = getRecaptchaToken();
+    if (!recaptchaToken) {
+      setError("Please complete the reCAPTCHA verification.");
+      return;
+    }
+
     try {
-      const response = await fetch(`${API_URL}/auth/forgot-password`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: resetEmail.trim() }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to send reset OTP.");
-      }
-
-      navigate(`/verify-otp?email=${encodeURIComponent(resetEmail.trim())}&purpose=PASSWORD_RESET`);
+      await sendForgotPasswordRequest(resetEmail.trim(), recaptchaToken);
     } catch (err) {
       setError(err.message);
+      resetRecaptcha();
     }
   };
 
@@ -266,7 +288,14 @@ const Login = () => {
       setError("Please enter email and password.");
       return;
     }
-    await sendData()
+
+    const recaptchaToken = getRecaptchaToken();
+    if (!recaptchaToken) {
+      setError("Please complete the reCAPTCHA verification.");
+      return;
+    }
+
+    await sendData(recaptchaToken);
     // // Demo admin login
     // if (email === "admin@qrcard.com" && password === "admin123") {
     //   localStorage.setItem("userRole", "admin");
@@ -326,7 +355,7 @@ const Login = () => {
   };
 
   return (
-    <div className="page-wrapper">
+    <div className="page-wrapper register-page">
       <Header />
 
       <main className="auth-container">
@@ -384,6 +413,11 @@ const Login = () => {
                   <div className="forgot-password-link">
                     <a href="#forgot" onClick={handleForgotPasswordClick}>Forgot Password?</a>
                   </div>
+
+                  <RecaptchaWidget
+                    ref={recaptchaRef}
+                    widgetKey="login-recaptcha"
+                  />
 
                   {error && <p className="auth-error-message">{error}</p>}
 
@@ -459,6 +493,11 @@ const Login = () => {
                     />
                   </div>
 
+                  <RecaptchaWidget
+                    ref={recaptchaRef}
+                    widgetKey="forgot-recaptcha"
+                  />
+
                   {error && <p className="auth-error-message">{error}</p>}
 
                   <button type="submit" className="btn-auth-primary">
@@ -466,7 +505,16 @@ const Login = () => {
                   </button>
 
                   <div className="auth-switch-text" style={{ marginTop: "20px" }}>
-                    <a href="#login" onClick={(e) => { e.preventDefault(); setError(""); setShowForgotPassword(false); }}>Back to Login</a>
+                    <a
+                      href="#login"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setError("");
+                        setShowForgotPassword(false);
+                      }}
+                    >
+                      Back to Login
+                    </a>
                   </div>
                 </form>
               </>
