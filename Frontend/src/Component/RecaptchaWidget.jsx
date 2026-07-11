@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
 export const RECAPTCHA_SITE_KEY =
@@ -68,7 +69,6 @@ const RecaptchaWidget = forwardRef(function RecaptchaWidget({ widgetKey = "defau
 
   useEffect(() => {
     let cancelled = false;
-    const container = containerRef.current;
 
     const mountWidget = async () => {
       try {

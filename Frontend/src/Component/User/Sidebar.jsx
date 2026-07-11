@@ -2,7 +2,6 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { clearAuthSession } from "../../utils/auth";
 import "../../CSS/User/Sidebar.css";
-import ThemeToggle from "../ThemeToggle";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -299,7 +299,7 @@ const extractCardInformation = (text) => {
   const lines = [];
 
   for (let line of rawLines) {
-    const clean = line.replace(/[|•]/g, " ").replace(/\s+/g, " ").trim();
+    const clean = cleanLine(line);
     if (!clean) continue;
 
     // Try to extract email

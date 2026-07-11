@@ -113,7 +113,28 @@ const OTPVerification = () => {
       }
 
       if (purpose === "PASSWORD_RESET") {
-        throw new Error("Password reset OTP verification is not available yet.");
+        const response = await fetch(`${API_URL}/auth/verify-otp`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            code: otpCode,
+            purpose: "PASSWORD_RESET",
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Verification failed");
+        }
+
+        setSuccess("OTP Verified Successfully!");
+        setResetToken(result.data?.reset_token || "");
+        setIsResetFlow(true);
+        return;
       }
 
       throw new Error("Unsupported verification purpose.");

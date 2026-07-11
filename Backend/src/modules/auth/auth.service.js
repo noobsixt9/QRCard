@@ -150,11 +150,13 @@ async function verifyRecaptcha(token) {
 
 async function verifyOTP({ email, code, purpose, recaptchaToken }) {
   // 1. Verify reCAPTCHA token
-  const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
-  if (!isRecaptchaValid) {
-    const err = new Error('Invalid reCAPTCHA verification. Please try again.')
-    err.status = 400
-    throw err
+  if (recaptchaToken) {
+    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
+    if (!isRecaptchaValid) {
+      const err = new Error('Invalid reCAPTCHA verification. Please try again.')
+      err.status = 400
+      throw err
+    }
   }
 
   // 2. Look up the OTP

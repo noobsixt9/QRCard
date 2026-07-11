@@ -50,7 +50,7 @@ const verifyOtpSchema = z.object({
   email: z.string().email('Invalid email address'),
   code: z.string().length(6, 'OTP code must be exactly 6 digits'),
   purpose: z.enum(['REGISTRATION', 'PASSWORD_RESET']),
-  recaptchaToken: z.string().min(1, 'reCAPTCHA verification is required'),
+  recaptchaToken: z.string().min(1, 'reCAPTCHA verification is required').optional(),
 })
 
 const resendOtpSchema = z.object({

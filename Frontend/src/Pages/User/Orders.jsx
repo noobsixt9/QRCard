@@ -44,7 +44,7 @@ const Orders = () => {
     };
 
     fetchOrders();
-  }, []);
+  }, [navigate]);
 
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {

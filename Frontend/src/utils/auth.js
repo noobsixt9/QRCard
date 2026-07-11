@@ -4,7 +4,7 @@ export function getAuthSession() {
   const token = localStorage.getItem("token");
   if (!token) return null;
 
-  let user = null;
+  let user;
   try {
     const stored = localStorage.getItem("user");
     user = stored ? JSON.parse(stored) : null;
