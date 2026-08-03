@@ -323,10 +323,15 @@
 
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../../Component/User/Sidebar";
+import ConfirmModal from "../../Component/ConfirmModal";
 import "../../CSS/User/Settings.css";
+import { API_URL, getHeaders } from "../../config/api";
 
 const Settings = () => {
+  const navigate = useNavigate();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [accountData, setAccountData] = useState({
     fullName: "",
     email: "",
@@ -456,11 +461,32 @@ const Settings = () => {
     });
   };
 
-  const handleDeleteAccount = () => {
-    setMessage(
-      "Delete account feature can be connected with backend later."
-    );
-    setMessageType("error");
+  const handleDeleteAccountClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    setIsDeleteModalOpen(false);
+    try {
+      setMessage("");
+      const response = await fetch(`${API_URL}/profile`, {
+        method: "DELETE",
+        headers: getHeaders(),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to delete account.");
+      }
+
+      localStorage.clear();
+      sessionStorage.clear();
+      navigate("/");
+    } catch (err) {
+      setMessage(err.message || "An error occurred while deleting your account.");
+      setMessageType("error");
+    }
   };
 
   return (
@@ -592,7 +618,7 @@ const Settings = () => {
               <button
                 type="button"
                 className="delete-account-btn"
-                onClick={handleDeleteAccount}
+                onClick={handleDeleteAccountClick}
               >
                 Delete Account
               </button>
@@ -770,6 +796,16 @@ const Settings = () => {
           </aside>
         </form>
       </main>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Account"
+        message="Are you absolutely sure you want to delete your account? This action is permanent and cannot be undone."
+        confirmText="Delete Account"
+        isDestructive={true}
+      />
     </div>
   );
 };

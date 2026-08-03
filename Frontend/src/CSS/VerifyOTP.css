@@ -7,6 +7,7 @@
   justify-content: center;
   gap: 8px;
   margin: 25px 0;
+  flex-wrap: nowrap; /* Prevent inputs from breaking into two rows */
 }
 
 .otp-input-field {
@@ -21,6 +22,8 @@
   color: var(--text-main);
   outline: none;
   transition: all 0.2s ease-in-out;
+  flex-shrink: 1; /* Allow fields to shrink if screen is narrow */
+  min-width: 0; /* Allow shrinking below default width */
 }
 
 .otp-input-field:focus {
@@ -93,4 +96,17 @@ html[data-theme="dark"] .otp-input-field:focus {
   height: auto !important;
   min-height: 515px;
   padding: 36px 20px !important;
+}
+
+/* Small Screen Responsiveness for OTP Inputs */
+@media (max-width: 400px) {
+  .otp-inputs-wrapper {
+    gap: 6px;
+    margin: 20px 0;
+  }
+  .otp-input-field {
+    width: 32px;
+    height: 40px;
+    font-size: 16px;
+  }
 }

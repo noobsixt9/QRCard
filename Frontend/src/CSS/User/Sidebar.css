@@ -72,7 +72,7 @@
 }
 
 /* Hide mobile items on desktop */
-.mobile-menu-btn,
+.mobile-top-bar,
 .sidebar-close-btn,
 .sidebar-overlay {
   display: none;
@@ -94,22 +94,74 @@
 ========================= */
 
 @media (max-width: 768px) {
-  .mobile-menu-btn {
+  .mobile-top-bar {
     display: flex;
     position: fixed;
-    top: 18px;
-    left: 18px;
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 10px;
-    background: #4f6bed;
-    color: #ffffff;
-    font-size: 22px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--bg-card, #ffffff);
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    padding: 0 20px;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     z-index: 200;
+  }
+
+  html[data-theme="dark"] .mobile-top-bar {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .mobile-logo-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-main, #0f172a);
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  html[data-theme="dark"] .mobile-logo-link {
+    color: #f8fafc;
+  }
+
+  .mobile-logo-img {
+    height: 28px;
+    width: auto;
+  }
+
+  .mobile-hamburger-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 0;
+  }
+
+  .mobile-hamburger-btn .hamburger-line {
+    width: 20px;
+    height: 2px;
+    background: var(--text-main, #0f172a);
+    border-radius: 2px;
+    transition: all 0.2s ease;
+  }
+
+  html[data-theme="dark"] .mobile-hamburger-btn .hamburger-line {
+    background: #f8fafc;
+  }
+
+  .mobile-hamburger-btn .hamburger-line:first-child {
+    width: 24px;
   }
 
   .sidebar {
@@ -164,5 +216,17 @@
   .sidebar-link {
     height: 38px;
     font-size: 13px;
+  }
+
+  /* Push main content down to avoid overlapping with the fixed mobile menu button */
+  .dashboard-main,
+  .digital-profile-content,
+  .qr-main,
+  .ai-bio-main,
+  .card-design-main,
+  .my-orders-main,
+  .orders-main,
+  .settings-main {
+    padding-top: 80px !important;
   }
 }

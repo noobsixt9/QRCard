@@ -1,21 +1,25 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { clearAuthSession } from "../../utils/auth";
+import ConfirmModal from "../ConfirmModal";
+import logo from "../../assets/qr-card-logo.png";
 import "../../CSS/User/Sidebar.css";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const closeSidebar = () => {
     setIsOpen(false);
   };
 
-  const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to log out?");
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true);
+  };
 
-    if (!confirmLogout) return;
-
+  const handleConfirmLogout = () => {
+    setIsLogoutModalOpen(false);
     clearAuthSession();
     navigate("/login", { replace: true });
   };
@@ -23,9 +27,20 @@ const Sidebar = () => {
   return (
     <>
       {!isOpen && (
-        <button className="mobile-menu-btn" onClick={() => setIsOpen(true)}>
-          ☰
-        </button>
+        <div className="mobile-top-bar">
+          <NavLink to="/dashboard" className="mobile-logo-link">
+            <img src={logo} alt="QR Card" className="mobile-logo-img" />
+          </NavLink>
+          <button
+            type="button"
+            className="mobile-hamburger-btn"
+            onClick={() => setIsOpen(true)}
+            aria-label="Open Menu"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
+        </div>
       )}
 
       {isOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
@@ -67,7 +82,7 @@ const Sidebar = () => {
         </nav>
         
 
-        <button type="button" className="logout-btn" onClick={handleLogout}>
+        <button type="button" className="logout-btn" onClick={handleLogoutClick}>
           Log Out
         </button>
 
@@ -75,6 +90,16 @@ const Sidebar = () => {
           ×
         </button>
       </aside>
+
+      <ConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        title="Log Out"
+        message="Are you sure you want to log out?"
+        confirmText="Log Out"
+        isDestructive={true}
+      />
     </>
   );
 };

@@ -184,7 +184,10 @@ const Login = () => {
           navigate(`/verify-otp?email=${encodeURIComponent(email.trim())}&purpose=REGISTRATION`);
           return;
         }
-        throw new Error(result.message || "Login failed.");
+        const errorMessage = result.errors && result.errors.length > 0
+          ? result.errors[0].message
+          : (result.message || "Login failed.");
+        throw new Error(errorMessage);
       }
 
       const token = result.data?.token;
@@ -262,15 +265,7 @@ const Login = () => {
       return;
     }
 
-    //   redirectAfterLogin("admin");
-    //   return;
-    // }
-
-    // // Demo normal user login
-    // localStorage.setItem("userRole", "user");
-    // localStorage.setItem("user", JSON.stringify({ name: "User" }));
-
-    // redirectAfterLogin("user");
+    await sendData();
   };
 
   const handleGoogleLogin = async (credentialResponse) => {
@@ -388,43 +383,15 @@ const Login = () => {
                   </div>
 
                   <div className="google-login-wrapper">
-                    {(!import.meta.env.VITE_GOOGLE_CLIENT_ID || 
-                      import.meta.env.VITE_GOOGLE_CLIENT_ID.includes("your_google_client_id") || 
-                      import.meta.env.VITE_GOOGLE_CLIENT_ID.includes("xxxxxxxxxxxxxxxx") || 
-                      import.meta.env.VITE_GOOGLE_CLIENT_ID === "1234567890-xxxxxxxxxxxxxxxx.apps.googleusercontent.com") ? (
-                      <button
-                        type="button"
-                        className="btn-google-auth"
-                        style={{ marginTop: "10px" }}
-                        onClick={() => {
-                          const chosenEmail = prompt("Enter email address to simulate Continue with Google:", "user@example.com");
-                          if (chosenEmail) {
-                            handleGoogleLogin({ credential: chosenEmail });
-                          }
-                        }}
-                      >
-                        <svg
-                          style={{ width: "16px", height: "16px" }}
-                          viewBox="0 0 48 48"
-                        >
-                          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                          <path fill="#4285F4" d="M46.5 24c0-1.55-.15-3.24-.47-4.78H24v9.03h12.75c-.55 2.94-2.21 5.44-4.71 7.11v5.9h7.62c4.46-4.1 7.03-10.13 7.03-17.26z"/>
-                          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.62-5.9c-2.11 1.41-4.8 2.25-8.27 2.25-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                          <path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.98-6.19z"/>
-                        </svg>
-                        <span>Continue with Google</span>
-                      </button>
-                    ) : (
-                      <GoogleLogin
-                        onSuccess={handleGoogleLogin}
-                        onError={() =>
-                          setError("Google login failed. Please try again.")
-                        }
-                        text="continue_with"
-                        shape="rectangular"
-                        width="100%"
-                      />
-                    )}
+                    <GoogleLogin
+                      onSuccess={handleGoogleLogin}
+                      onError={() =>
+                        setError("Google login failed. Please try again.")
+                      }
+                      text="continue_with"
+                      shape="rectangular"
+                      width="100%"
+                    />
                   </div>
 
                   <div className="auth-switch-text">

@@ -1052,3 +1052,10 @@
   font-size: 0.82rem;
   color: var(--text-muted, #6b7280);
 }
+
+/* Hide auth decorative sidebar on mobile to keep form on a single row/screen */
+@media (max-width: 768px) {
+  .auth-sidebar {
+    display: none !important;
+  }
+}

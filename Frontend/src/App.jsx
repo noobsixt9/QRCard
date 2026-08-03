@@ -4,6 +4,7 @@ import "./CSS/App.css";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import OTPVerification from "./Pages/OTPVerification";
+import VerifyHuman from "./Pages/VerifyHuman";
 import ErrorPage from "./Pages/ErrorPage";
 import LandingPage from "./Pages/LandingPage";
 import Dashboard from "./Pages/User/Dashboard";
@@ -29,6 +30,38 @@ const App = () => {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     document.documentElement.setAttribute("data-theme", savedTheme);
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        const target = e.target;
+        const isInput =
+          target.tagName === "INPUT" &&
+          ["text", "email", "password", "tel", "number", "url"].includes(target.type);
+
+        if (isInput) {
+          const form = target.form;
+          const selector = 'input:not([type="submit"]):not([type="button"]):not([type="hidden"]):not([disabled]):not([readonly])';
+          const container = form || document;
+          const inputs = Array.from(container.querySelectorAll(selector)).filter(
+            (input) => {
+              const rect = input.getBoundingClientRect();
+              return rect.width > 0 && rect.height > 0;
+            }
+          );
+
+          const index = inputs.indexOf(target);
+          if (index > -1 && index < inputs.length - 1) {
+            e.preventDefault();
+            inputs[index + 1].focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   return (
@@ -52,6 +85,7 @@ const App = () => {
           }
         />
         <Route path="/verify-otp" element={<OTPVerification />} />
+        <Route path="/verify-human" element={<VerifyHuman />} />
         <Route path="/u/:username" element={<PublicProfile />} />
 
         <Route

@@ -153,7 +153,7 @@ const Dashboard = () => {
         const [userRes, profileRes, qrRes, ordersRes] = await Promise.all([
           fetch(`${API_URL}/auth/me`, { headers }),
           fetch(`${API_URL}/profile`, { headers }),
-          fetch(`${API_URL}/qrcode`, { headers }),
+          fetch(`${API_URL}/qr`, { headers }),
           fetch(`${API_URL}/orders`, { headers }),
         ]);
 

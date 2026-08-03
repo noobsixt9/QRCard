@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Header from "../Component/Header";
+import "../CSS/Register.css";
 import "../CSS/VerifyOTP.css";
 import { API_URL } from "../config/api";
 
@@ -244,6 +245,7 @@ const OTPVerification = () => {
                       />
                     ))}
                   </div>
+
 
                   {error && <p className="auth-error-message">{error}</p>}
                   {success && <p className="auth-success-message">{success}</p>}

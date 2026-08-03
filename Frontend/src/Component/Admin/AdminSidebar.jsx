@@ -1,20 +1,26 @@
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { clearAuthSession } from "../../utils/auth";
+import ConfirmModal from "../ConfirmModal";
 import "../../CSS/Admin/AdminDashboard.css";
 
 const AdminSidebar = () => {
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to log out?");
-    if (!confirmLogout) return;
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true);
+  };
 
+  const handleConfirmLogout = () => {
+    setIsLogoutModalOpen(false);
     clearAuthSession();
     navigate("/login", { replace: true });
   };
 
   return (
-    <aside className="admin-sidebar">
+    <>
+      <aside className="admin-sidebar">
       <NavLink to="/" end className="admin-logo">
         <h2>Admin</h2>
         <h2>QRCard</h2>
@@ -57,11 +63,22 @@ const AdminSidebar = () => {
         </NavLink>
       </nav>
 
-      <button type="button" className="admin-logout-btn" onClick={handleLogout}>
+      <button type="button" className="admin-logout-btn" onClick={handleLogoutClick}>
         <i className="bi bi-box-arrow-right"></i>
         Log Out
       </button>
     </aside>
+
+    <ConfirmModal
+      isOpen={isLogoutModalOpen}
+      onClose={() => setIsLogoutModalOpen(false)}
+      onConfirm={handleConfirmLogout}
+      title="Log Out"
+      message="Are you sure you want to log out?"
+      confirmText="Log Out"
+      isDestructive={true}
+    />
+  </>
   );
 };
 
