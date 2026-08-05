@@ -13,6 +13,7 @@
 }
 
 .ai-bio-header {
+  max-width: 1040px;
   margin-bottom: 40px;
 }
 
@@ -32,13 +33,12 @@
   margin: 0;
 }
 
-/* Main Layout */
 .ai-bio-layout {
-  max-width: 870px;
+  max-width: 1040px;
   display: grid;
-  grid-template-columns: 390px 430px;
-  gap: 34px;
-  align-items: start;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 36px;
+  align-items: stretch;
 }
 
 /* Left Card */
@@ -48,10 +48,12 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 15px;
+  box-sizing: border-box;
 }
 
 .bio-details-card {
   padding: 32px 32px 28px;
+  height: 100%;
 }
 
 .bio-details-card h2,
@@ -96,19 +98,20 @@
   border-radius: 8px;
   background: #ffffff;
   color: #111827;
-  font-size: 13px;
+  font-size: clamp(12px, 1.1vw, 13px);
   font-weight: 500;
   outline: none;
+  box-sizing: border-box;
 }
 
 .bio-form-group input {
-  height: 40px;
-  padding: 0 16px;
+  height: clamp(36px, 3.8vw, 38px);
+  padding: 0 12px;
 }
 
 .bio-form-group textarea {
   height: 65px;
-  padding: 18px 16px;
+  padding: 12px;
   resize: none;
 }
 
@@ -123,21 +126,28 @@
 }
 
 .tone-options {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
+  width: 100%;
 }
 
 .tone-pill {
-  height: 31px;
-  padding: 0 17px;
+  width: 100%;
+  height: 36px;
+  padding: 0 8px;
   border: 1px solid #cbd5e1;
-  border-radius: 999px;
+  border-radius: 9999px;
   background: #ffffff;
   color: #111827;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .tone-pill.active {
@@ -154,53 +164,67 @@
   background: #7c3aed;
   color: #ffffff;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 850;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 24px;
 }
 
 /* Right Column */
 .bio-result-column {
   display: flex;
   flex-direction: column;
-  gap: 34px;
+  justify-content: space-between;
+  height: 100%;
+  gap: 22px;
 }
 
 .generated-bio-card {
-  padding: 32px 32px 34px;
+  padding: 26px 26px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
 }
 
 .generated-bio-box {
-  min-height: 170px;
+  flex: 1;
+  min-height: 110px;
   border: 1px solid #cbd5e1;
   border-radius: 11px;
   background: #f8fafc;
-  padding: 24px 22px;
-  margin-top: 24px;
+  padding: 18px 18px;
+  margin-top: 18px;
 }
 
 .generated-bio-box p {
   font-size: 13px;
-  line-height: 1.75;
+  line-height: 1.7;
   font-weight: 600;
   color: #334155;
   margin: 0;
 }
 
 .bio-action-buttons {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%;
 }
 
 .bio-action-buttons button {
-  height: 38px;
-  padding: 0 24px;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .use-bio-btn {
@@ -210,6 +234,12 @@
 }
 
 .secondary-bio-btn {
+  border: none;
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+.outline-bio-btn {
   border: 1px solid #cbd5e1;
   background: #ffffff;
   color: #111827;
@@ -217,7 +247,7 @@
 
 /* Suggestion Card */
 .bio-suggestion-card {
-  padding: 32px;
+  padding: 26px 26px 24px;
 }
 
 .bio-suggestion-card ul {
@@ -241,17 +271,20 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .ai-bio-main {
-    padding: 38px 30px 60px;
+    padding: 38px 28px 60px;
   }
 
   .ai-bio-layout {
     max-width: 100%;
     grid-template-columns: 1fr;
+    gap: 28px;
   }
 
   .bio-result-column {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
   }
 }
 
@@ -264,32 +297,131 @@
     padding: 78px 20px 50px;
   }
 
-  .tone-options {
-    flex-wrap: wrap;
-  }
-
-  .bio-action-buttons {
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 480px) {
-  .ai-bio-main {
-    padding: 76px 16px 45px;
-  }
-
-  .ai-bio-header h1 {
-    font-size: 25px;
-  }
-
   .bio-details-card,
   .generated-bio-card,
   .bio-suggestion-card {
     padding: 26px 22px;
   }
 
-  .generate-bio-btn,
-  .bio-action-buttons button {
-    width: 100%;
+  .tone-options {
+    flex-wrap: wrap;
+    gap: 8px;
   }
+
+  .tone-pill {
+    height: 30px;
+    padding: 0 14px;
+    font-size: 11.5px;
+  }
+
+  .bio-action-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .bio-action-buttons button {
+    flex: 1;
+    height: 36px;
+    font-size: 12px;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tone-options {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .bio-result-column {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-bio-main {
+    padding: 76px 14px 45px;
+  }
+
+  .ai-bio-header h1 {
+    font-size: 24px;
+  }
+
+  .bio-details-card,
+  .generated-bio-card,
+  .bio-suggestion-card {
+    padding: 22px 18px;
+  }
+
+  .generate-bio-btn {
+    width: auto;
+    min-width: 150px;
+    height: 36px;
+    font-size: 12px;
+  }
+}
+
+/* =========================
+   DARK THEME OVERRIDES
+   ========================= */
+html[data-theme="dark"] .ai-bio-main {
+  background: #0f172a;
+}
+
+html[data-theme="dark"] .ai-bio-header h1,
+html[data-theme="dark"] .bio-details-card h2,
+html[data-theme="dark"] .generated-bio-card h2,
+html[data-theme="dark"] .bio-suggestion-card h2,
+html[data-theme="dark"] .bio-form-group label,
+html[data-theme="dark"] .tone-section label {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .ai-bio-header p,
+html[data-theme="dark"] .card-subtitle,
+html[data-theme="dark"] .bio-suggestion-card li {
+  color: #94a3b8;
+}
+
+html[data-theme="dark"] .bio-details-card,
+html[data-theme="dark"] .generated-bio-card,
+html[data-theme="dark"] .bio-suggestion-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .generated-bio-box {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .generated-bio-box p {
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] .bio-form-group input,
+html[data-theme="dark"] .bio-form-group textarea {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .tone-pill {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #475569;
+}
+
+html[data-theme="dark"] .tone-pill.active {
+  background: #1e1b4b;
+  color: #818cf8;
+  border-color: #3730a3;
+}
+
+html[data-theme="dark"] .secondary-bio-btn {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #475569;
 }

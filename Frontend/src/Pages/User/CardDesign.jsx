@@ -7,6 +7,7 @@ import "../../CSS/User/CardDesign.css";
 const CardDesign = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
+  const [qrCodeData, setQrCodeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -18,7 +19,7 @@ const CardDesign = () => {
   const [showAvatar, setShowAvatar] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndQR = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
@@ -27,26 +28,37 @@ const CardDesign = () => {
           return;
         }
 
-        const response = await fetch(`${API_URL}/profile`, {
-          method: "GET",
-          headers: getHeaders(),
-        });
-        const result = await response.json();
+        const [profileRes, qrRes] = await Promise.all([
+          fetch(`${API_URL}/profile`, {
+            method: "GET",
+            headers: getHeaders(),
+          }),
+          fetch(`${API_URL}/qr`, {
+            method: "GET",
+            headers: getHeaders(null),
+          }),
+        ]);
 
-        if (response.ok) {
-          setProfile(result.data?.profile || result.data || {});
+        const profileResult = await profileRes.json();
+        if (profileRes.ok) {
+          setProfile(profileResult.data?.profile || profileResult.data || {});
         } else {
-          throw new Error(result.message || "Failed to load profile details");
+          throw new Error(profileResult.message || "Failed to load profile details");
+        }
+
+        if (qrRes.ok) {
+          const qrResult = await qrRes.json();
+          setQrCodeData(qrResult.data);
         }
       } catch (err) {
-        console.error("Fetch profile error:", err.message);
+        console.error("Fetch data error:", err.message);
         setError("Please complete your digital profile first to preview card details.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfile();
+    fetchProfileAndQR();
   }, [navigate]);
 
   const handlePlaceOrder = () => {
@@ -82,6 +94,10 @@ const CardDesign = () => {
       .slice(0, 2)
       .toUpperCase();
   };
+
+  const activeQrUrl = qrType === "ONLINE"
+    ? qrCodeData?.online?.qr_data_url
+    : qrCodeData?.offline?.qr_data_url;
 
   return (
     <div className="card-design-page">
@@ -188,20 +204,16 @@ const CardDesign = () => {
                 </select>
               </div>
 
-              <div className="design-control-group">
-                <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
-                  <input
-                    type="checkbox"
-                    checked={showAvatar}
-                    onChange={(e) => setShowAvatar(e.target.checked)}
-                  />
-                  Show profile photo on card
-                </label>
-              </div>
-
               <div className="design-action-buttons">
-                <button type="button" className="preview-card-btn" onClick={() => navigate("/qr-codes")}>
-                  Manage QRs
+                <button 
+                  type="button" 
+                  className="preview-card-btn" 
+                  onClick={() => {
+                    const previewEl = document.querySelector(".live-preview-card");
+                    if (previewEl) previewEl.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  Preview Card
                 </button>
                 <button type="button" className="print-order-btn" onClick={handlePlaceOrder}>
                   Place Print Order
@@ -226,17 +238,21 @@ const CardDesign = () => {
                   </div>
                 </div>
 
-                <div className="preview-qr-box" style={{ borderColor: themeColor }}>
-                  {showAvatar && profile?.avatar_url ? (
+                <div className="preview-qr-box" style={{ borderColor: themeColor, background: "#ffffff", padding: "4px" }}>
+                  {activeQrUrl ? (
                     <img
-                      src={getAvatarUrl(profile.avatar_url)}
-                      alt="Avatar"
-                      style={{ width: "100%", height: "100%", borderRadius: "6px", objectFit: "cover" }}
+                      src={activeQrUrl}
+                      alt="QR Code"
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
                     />
                   ) : (
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: themeColor, fontWeight: "bold" }}>
-                      {getInitials(profile?.full_name)}
-                    </div>
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+                        `${window.location.origin}/u/${profile?.user?.username || "username"}`
+                      )}`}
+                      alt="QR Code"
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    />
                   )}
                 </div>
               </div>

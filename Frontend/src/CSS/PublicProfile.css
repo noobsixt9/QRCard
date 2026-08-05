@@ -8,7 +8,7 @@
   --border-color: #e5e7eb;
 }
 
-.dark {
+html[data-theme="dark"] {
   --primary-color: #6366f1;
   --primary-hover: #4f46e5;
   --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);

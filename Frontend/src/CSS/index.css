@@ -39,8 +39,8 @@ a {
 html[data-theme="dark"] {
   --page-bg: #0f172a;
   --card-bg: #182235;
-  --text-main: #f8fafc;
-  --text-light: #aebbd0;
+  --text-main: #ffffff;
+  --text-light: #e2e8f0;
   --border-color: #334155;
   --input-bg: #111c2e;
 }
@@ -110,10 +110,10 @@ html[data-theme="dark"] .digital-profile-page,
 html[data-theme="dark"] .digital-profile-content,
 html[data-theme="dark"] .qr-codes-page,
 html[data-theme="dark"] .qr-codes-main,
-html[data-theme="dark"] .ai-bio-page,
-html[data-theme="dark"] .ai-bio-main,
 html[data-theme="dark"] .card-design-page,
 html[data-theme="dark"] .card-design-main,
+html[data-theme="dark"] .ai-bio-page,
+html[data-theme="dark"] .ai-bio-main,
 html[data-theme="dark"] .orders-page,
 html[data-theme="dark"] .orders-main,
 html[data-theme="dark"] .printing-orders-page,
@@ -123,13 +123,10 @@ html[data-theme="dark"] .settings-main,
 html[data-theme="dark"] .admin-page,
 html[data-theme="dark"] .admin-page-main,
 html[data-theme="dark"] .qr-page,
-html[data-theme="dark"] .qr-main,
-html[data-theme="dark"] .qr-preview-box,
-html[data-theme="dark"] .generated-bio-box,
-html[data-theme="dark"] .live-qr-box {
-  background: var(--page-bg) !important;
-  color: var(--text-main) !important;
-  border-color: var(--border-color) !important;
+html[data-theme="dark"] .qr-main {
+  background: var(--page-bg);
+  color: #ffffff;
+  border-color: var(--border-color);
 }
 
 html[data-theme="dark"] .qr-option-card,
@@ -155,98 +152,77 @@ html[data-theme="dark"] .form-box,
 html[data-theme="dark"] .admin-panel,
 html[data-theme="dark"] .recent-printing-card,
 html[data-theme="dark"] .quick-admin-card,
-html[data-theme="dark"] .live-card-preview {
-  background: var(--card-bg) !important;
-  color: var(--text-main) !important;
-  border-color: var(--border-color) !important;
+html[data-theme="dark"] .customize-card,
+html[data-theme="dark"] .live-preview-card,
+html[data-theme="dark"] .physical-card-scanner-card,
+html[data-theme="dark"] .physical-converter-box {
+  background: var(--card-bg);
+  color: #ffffff;
+  border-color: var(--border-color);
 }
 
+/* Explicit Pure White font for text elements in dark mode */
 html[data-theme="dark"] h1,
 html[data-theme="dark"] h2,
 html[data-theme="dark"] h3,
 html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6,
 html[data-theme="dark"] label,
+html[data-theme="dark"] .dashboard-header h1,
+html[data-theme="dark"] .dashboard-user h4,
+html[data-theme="dark"] .dashboard-stat-card h2,
+html[data-theme="dark"] .dashboard-action-card h3,
+html[data-theme="dark"] .quick-title,
+html[data-theme="dark"] .profile-header h1,
+html[data-theme="dark"] .profile-form-card > h2,
+html[data-theme="dark"] .profile-status-info h3,
+html[data-theme="dark"] .ai-suggestion-card h2,
+html[data-theme="dark"] .suggestion-list li,
 html[data-theme="dark"] .qr-header h1,
 html[data-theme="dark"] .qr-option-card h2,
-html[data-theme="dark"] .qr-preview-info h3,
-html[data-theme="dark"] .qr-preview-box span,
 html[data-theme="dark"] .ai-bio-header h1,
-html[data-theme="dark"] .bio-details-card h2,
-html[data-theme="dark"] .generated-bio-card h2,
-html[data-theme="dark"] .bio-suggestion-card h2,
-html[data-theme="dark"] .bio-form-group label,
-html[data-theme="dark"] .tone-section label,
-html[data-theme="dark"] .generated-bio-box p,
 html[data-theme="dark"] .card-design-header h1,
-html[data-theme="dark"] .design-editor-card h2,
-html[data-theme="dark"] .design-preview-card h2,
-html[data-theme="dark"] .editor-section-title,
-html[data-theme="dark"] .orders-header h1,
-html[data-theme="dark"] .orders-table th,
-html[data-theme="dark"] .orders-table td,
-html[data-theme="dark"] .order-id,
-html[data-theme="dark"] .order-date,
-html[data-theme="dark"] .order-details h4,
-html[data-theme="dark"] .order-detail-row span,
-html[data-theme="dark"] .order-detail-row strong,
-html[data-theme="dark"] .no-orders h3,
-html[data-theme="dark"] .search-wrapper input,
-html[data-theme="dark"] .preview-input-group label,
-html[data-theme="dark"] .preview-control-block label,
-html[data-theme="dark"] .live-card-top h3,
-html[data-theme="dark"] .live-info-list span,
-html[data-theme="dark"] .live-qr-box strong,
 html[data-theme="dark"] .settings-header h1,
 html[data-theme="dark"] .settings-card h2,
-html[data-theme="dark"] .settings-form-group label,
-html[data-theme="dark"] .default-qr-section label,
-html[data-theme="dark"] .setting-row h3,
-html[data-theme="dark"] .dashboard-header h1,
-html[data-theme="dark"] .stat-info h3,
-html[data-theme="dark"] .action-info h3,
-html[data-theme="dark"] .profile-status-info h3,
-html[data-theme="dark"] .suggestion-list li,
+html[data-theme="dark"] .my-orders-header h1,
+html[data-theme="dark"] .recent-orders-header h2,
+html[data-theme="dark"] .orders-header h1,
 html[data-theme="dark"] .admin-header h1,
-html[data-theme="dark"] .admin-stat-card h2,
-html[data-theme="dark"] .recent-printing-card h2,
-html[data-theme="dark"] .quick-admin-card h2,
-html[data-theme="dark"] .admin-orders-table th,
-html[data-theme="dark"] .admin-orders-table td {
-  color: var(--text-main) !important;
+html[data-theme="dark"] .admin-page-header h1,
+html[data-theme="dark"] .admin-panel-title h2,
+html[data-theme="dark"] .admin-mini-card h2,
+html[data-theme="dark"] .sidebar-link,
+html[data-theme="dark"] .form-group label,
+html[data-theme="dark"] .photo-group label,
+html[data-theme="dark"] .setting-row h3,
+html[data-theme="dark"] td,
+html[data-theme="dark"] th {
+  color: #ffffff;
 }
 
+/* Crisp light text for subtitles and descriptions */
+html[data-theme="dark"] p,
+html[data-theme="dark"] span:not(.status-badge):not(.admin-pill):not(.active),
+html[data-theme="dark"] .dashboard-header p,
+html[data-theme="dark"] .dashboard-stat-card p,
+html[data-theme="dark"] .dashboard-action-card p,
+html[data-theme="dark"] .dashboard-user span,
+html[data-theme="dark"] .profile-header p,
+html[data-theme="dark"] .profile-status-info p,
 html[data-theme="dark"] .qr-header p,
 html[data-theme="dark"] .qr-option-card p,
-html[data-theme="dark"] .qr-preview-info p,
 html[data-theme="dark"] .ai-bio-header p,
-html[data-theme="dark"] .card-subtitle,
-html[data-theme="dark"] .bio-form-group input::placeholder,
-html[data-theme="dark"] .bio-form-group textarea::placeholder,
-html[data-theme="dark"] .bio-suggestion-card li,
 html[data-theme="dark"] .card-design-header p,
-html[data-theme="dark"] .design-editor-card p,
-html[data-theme="dark"] .orders-header p,
-html[data-theme="dark"] .order-card p,
-html[data-theme="dark"] .order-detail-row p,
-html[data-theme="dark"] .search-wrapper input::placeholder,
-html[data-theme="dark"] .preview-form-header p,
-html[data-theme="dark"] .preview-display-header p,
-html[data-theme="dark"] .live-card-top p,
-html[data-theme="dark"] .live-info-list i,
-html[data-theme="dark"] .live-qr-box small,
 html[data-theme="dark"] .settings-header p,
 html[data-theme="dark"] .settings-card-subtitle,
 html[data-theme="dark"] .setting-row p,
-html[data-theme="dark"] .dashboard-header p,
-html[data-theme="dark"] .stat-info p,
-html[data-theme="dark"] .action-info p,
-html[data-theme="dark"] .profile-status-info p,
-html[data-theme="dark"] .suggestion-list li::before,
+html[data-theme="dark"] .my-orders-header p,
+html[data-theme="dark"] .orders-header p,
 html[data-theme="dark"] .admin-header p,
-html[data-theme="dark"] .admin-stat-card p,
-html[data-theme="dark"] .admin-card-title-row p,
-html[data-theme="dark"] .admin-orders-table th {
-  color: var(--text-light) !important;
+html[data-theme="dark"] .admin-page-header p,
+html[data-theme="dark"] .admin-panel-title p {
+  color: #e2e8f0;
 }
 
 html[data-theme="dark"] input,
@@ -261,9 +237,9 @@ html[data-theme="dark"] .admin-input-group textarea,
 html[data-theme="dark"] .admin-input-group select,
 html[data-theme="dark"] .bio-form-group input,
 html[data-theme="dark"] .bio-form-group textarea {
-  background: var(--input-bg) !important;
-  color: var(--text-main) !important;
-  border-color: var(--border-color) !important;
+  background: var(--input-bg);
+  color: #ffffff;
+  border-color: var(--border-color);
 }
 
 /* Specific elements: list items and tables */
@@ -275,14 +251,14 @@ html[data-theme="dark"] .admin-orders-table,
 html[data-theme="dark"] .admin-orders-table tr,
 html[data-theme="dark"] .admin-orders-table th,
 html[data-theme="dark"] .admin-orders-table td {
-  background: var(--card-bg) !important;
-  color: var(--text-main) !important;
-  border-color: var(--border-color) !important;
+  background: var(--card-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
 }
 
 html[data-theme="dark"] .orders-table thead,
 html[data-theme="dark"] .admin-orders-table thead {
-  background: var(--page-bg) !important;
+  background: var(--page-bg);
 }
 
 html[data-theme="dark"] .option-group button,
@@ -292,9 +268,9 @@ html[data-theme="dark"] .admin-action-list button,
 html[data-theme="dark"] .tone-pill,
 html[data-theme="dark"] .secondary-bio-btn,
 html[data-theme="dark"] .outline-btn {
-  background: var(--card-bg) !important;
-  color: var(--text-main) !important;
-  border-color: var(--border-color) !important;
+  background: var(--card-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
 }
 
 html[data-theme="dark"] .option-group button.active,
@@ -302,9 +278,9 @@ html[data-theme="dark"] .default-qr-options button.active,
 html[data-theme="dark"] .preview-option-row button.active,
 html[data-theme="dark"] .admin-action-list button.active,
 html[data-theme="dark"] .tone-pill.active {
-  background: #5b68e8 !important;
-  color: #ffffff !important;
-  border-color: #5b68e8 !important;
+  background: #5b68e8;
+  color: #ffffff;
+  border-color: #5b68e8;
 }
 
 html[data-theme="dark"] .qr-box-inner,

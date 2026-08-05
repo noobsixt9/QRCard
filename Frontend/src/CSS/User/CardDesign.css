@@ -53,11 +53,11 @@
 
 .card-design-layout {
   width: 100%;
-  max-width: 1080px;
+  max-width: 1120px;
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 340px 1fr;
   gap: 36px;
-  align-items: start;
+  align-items: stretch;
 }
 
 /* =========================
@@ -65,11 +65,16 @@
 ========================= */
 
 .customize-card {
-  min-height: 520px;
+  min-height: 420px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
-  padding: 32px 28px;
+  padding: 26px 26px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .customize-card h2,
@@ -78,12 +83,12 @@
   line-height: 1.2;
   font-weight: 850;
   color: #111827;
-  margin: 0 0 28px;
+  margin: 0 0 20px;
   letter-spacing: -0.3px;
 }
 
 .design-control-group {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .design-control-group label {
@@ -181,7 +186,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 72px;
+  margin-top: 24px;
 }
 
 .preview-card-btn,
@@ -211,11 +216,14 @@
 ========================= */
 
 .live-preview-card {
-  min-height: 520px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
-  padding: 32px 48px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
 }
 
 .live-preview-card h2 {
@@ -227,14 +235,14 @@
   line-height: 1.4;
   font-weight: 700;
   color: #64748b;
-  margin: 0 0 48px;
+  margin: 0 0 20px;
 }
 
 /* Front Visiting Card */
 .visiting-card-front {
-  width: 360px;
-  height: 150px;
-  margin: 0 auto 26px;
+  width: 380px;
+  height: 165px;
+  margin: 0 auto 32px;
   padding: 24px 28px;
   background: #ffffff;
   border: 1px solid #cbd5e1;
@@ -247,16 +255,17 @@
 }
 
 .card-info {
-  min-width: 0;
+  flex: 1;
 }
 
 .card-brand {
   display: block;
   font-size: 11px;
-  line-height: 1;
   font-weight: 850;
   color: #4f6bed;
-  margin-bottom: 22px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
 }
 
 .card-info h3 {
@@ -290,10 +299,10 @@
 }
 
 .preview-qr-box {
-  width: 82px;
-  height: 82px;
+  width: 96px;
+  height: 96px;
   border: 1px solid #cbd5e1;
-  border-radius: 9px;
+  border-radius: 10px;
   background: #f8fafc;
 
   display: flex;
@@ -308,8 +317,8 @@
 
 /* Back Visiting Card */
 .visiting-card-back {
-  width: 360px;
-  height: 130px;
+  width: 380px;
+  height: 135px;
   margin: 0 auto;
   border-radius: 12px;
   background: #4f6bed;
@@ -388,6 +397,22 @@
     padding: 28px 24px;
   }
 
+  .design-action-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 24px;
+    width: 100%;
+  }
+
+  .preview-card-btn,
+  .print-order-btn {
+    flex: 1;
+    height: 38px;
+    font-size: 12px;
+    padding: 0 10px;
+  }
+
   .visiting-card-front,
   .visiting-card-back {
     width: 100%;
@@ -397,7 +422,7 @@
 
 @media (max-width: 480px) {
   .card-design-main {
-    padding: 76px 16px 45px;
+    padding: 76px 14px 45px;
   }
 
   .customize-card,
@@ -436,4 +461,109 @@
   .visiting-card-back h3 {
     font-size: 14px;
   }
+}
+
+/* =========================
+   DARK THEME OVERRIDES
+========================= */
+html[data-theme="dark"] .card-design-page {
+  background: var(--page-bg);
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .card-design-main {
+  background: var(--page-bg);
+}
+
+html[data-theme="dark"] .card-design-header h1,
+html[data-theme="dark"] .customize-card h2,
+html[data-theme="dark"] .live-preview-card h2,
+html[data-theme="dark"] .design-control-group label {
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .card-design-header p,
+html[data-theme="dark"] .live-preview-card > p {
+  color: var(--text-light);
+}
+
+html[data-theme="dark"] .customize-card,
+html[data-theme="dark"] .live-preview-card {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .qr-type-options button,
+html[data-theme="dark"] .template-style-list button,
+html[data-theme="dark"] .print-order-btn {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .qr-type-options button.active,
+html[data-theme="dark"] .template-style-list button.active {
+  background: #1e1b4b;
+  border-color: #5b68e8;
+  color: #818cf8;
+}
+
+html[data-theme="dark"] .visiting-card-front {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .card-info h3 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .card-info > p,
+html[data-theme="dark"] .card-contact span {
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] .preview-qr-box {
+  background: #0f172a;
+  border-color: #334155;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .visiting-card-front.template-minimal {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .visiting-card-front.template-professional {
+  background: #0f172a;
+  border-color: #1e293b;
+}
+
+html[data-theme="dark"] .visiting-card-front.template-professional .card-info h3 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .visiting-card-front.template-creative {
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  border-color: #4338ca;
+}
+
+html[data-theme="dark"] .visiting-card-front.template-creative .card-info h3 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .visiting-card-front.template-creative .card-info > p,
+html[data-theme="dark"] .visiting-card-front.template-creative .card-contact span {
+  color: #c7d2fe;
+}
+
+html[data-theme="dark"] .visiting-card-back {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .visiting-card-back h3 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .visiting-card-back p {
+  color: #dbeafe;
 }

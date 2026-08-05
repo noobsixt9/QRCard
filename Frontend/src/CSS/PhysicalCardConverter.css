@@ -304,3 +304,52 @@
     min-width: 0;
   }
 }
+
+/* =========================
+   DARK THEME OVERRIDES
+========================= */
+html[data-theme="dark"] .physical-card-section {
+  background: var(--page-bg);
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .physical-card-heading h2,
+html[data-theme="dark"] .physical-upload-column h3,
+html[data-theme="dark"] .online-card-column h3,
+html[data-theme="dark"] .physical-upload-area strong,
+html[data-theme="dark"] .online-card-information h4 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .physical-card-heading p,
+html[data-theme="dark"] .physical-upload-area > span:not(.choose-card-button),
+html[data-theme="dark"] .online-card-information p,
+html[data-theme="dark"] .physical-convert-arrow small {
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] .physical-converter-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .physical-upload-area,
+html[data-theme="dark"] .online-card-preview {
+  background: #111c2e;
+  border: 1px solid #334155;
+}
+
+html[data-theme="dark"] .physical-upload-area:hover {
+  background: #1e1b4b;
+  border-color: #5b68e8;
+}
+
+html[data-theme="dark"] .online-card-avatar {
+  background: #1e1b4b;
+  color: #818cf8;
+}
+
+html[data-theme="dark"] .online-card-qr {
+  background: #ffffff;
+  color: #111827;
+}

@@ -515,3 +515,105 @@
     width: 100%;
   }
 }
+
+/* =========================
+   DARK THEME OVERRIDES
+========================= */
+html[data-theme="dark"] .admin-page,
+html[data-theme="dark"] .admin-page-main {
+  background: var(--page-bg);
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .admin-page-header h1,
+html[data-theme="dark"] .admin-mini-card h2,
+html[data-theme="dark"] .admin-panel-title h2,
+html[data-theme="dark"] .admin-user-cell strong,
+html[data-theme="dark"] .admin-input-group label,
+html[data-theme="dark"] .admin-data-table td {
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .admin-page-header p,
+html[data-theme="dark"] .admin-mini-card p,
+html[data-theme="dark"] .admin-panel-title p,
+html[data-theme="dark"] .admin-user-cell span,
+html[data-theme="dark"] .admin-data-table th,
+html[data-theme="dark"] .admin-search-box i {
+  color: var(--text-light);
+}
+
+html[data-theme="dark"] .admin-btn {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .admin-mini-card,
+html[data-theme="dark"] .admin-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .admin-search-box,
+html[data-theme="dark"] .admin-filter {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .admin-search-box input {
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .admin-data-table thead {
+  background: var(--page-bg);
+}
+
+html[data-theme="dark"] .admin-data-table td {
+  border-bottom-color: var(--border-color);
+}
+
+html[data-theme="dark"] .admin-data-table tbody tr:hover {
+  background: var(--page-bg);
+}
+
+html[data-theme="dark"] .admin-user-avatar {
+  background: #1e1b4b;
+  color: #818cf8;
+}
+
+html[data-theme="dark"] .admin-pill.active,
+html[data-theme="dark"] .admin-pill.completed,
+html[data-theme="dark"] .admin-pill.approved,
+html[data-theme="dark"] .admin-pill.verified {
+  background: #052e16;
+  color: #4ade80;
+  border: 1px solid #166534;
+}
+
+html[data-theme="dark"] .admin-pill.blocked,
+html[data-theme="dark"] .admin-pill.rejected {
+  background: #450a0a;
+  color: #f87171;
+  border: 1px solid #991b1b;
+}
+
+html[data-theme="dark"] .admin-pill.pending {
+  background: #451a03;
+  color: #fbbf24;
+  border: 1px solid #78350f;
+}
+
+html[data-theme="dark"] .admin-pill.processing {
+  background: #431407;
+  color: #fb923c;
+  border: 1px solid #9a3412;
+}
+
+html[data-theme="dark"] .admin-pill.vendor,
+html[data-theme="dark"] .admin-pill.review {
+  background: #1e1b4b;
+  color: #818cf8;
+  border: 1px solid #3730a3;
+}

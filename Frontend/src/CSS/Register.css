@@ -1059,3 +1059,78 @@
     display: none !important;
   }
 }
+
+/* =========================
+   DARK THEME OVERRIDES
+========================= */
+html[data-theme="dark"] .page-wrapper,
+html[data-theme="dark"] .auth-container {
+  background: var(--page-bg);
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .auth-sidebar {
+  background: #1e1b4b;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .auth-sidebar h2 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .auth-sidebar > p {
+  color: #c7d2fe;
+}
+
+html[data-theme="dark"] .mini-card-preview,
+html[data-theme="dark"] .mini-card-preview-login {
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+html[data-theme="dark"] .mini-qr {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+html[data-theme="dark"] .mini-text h4,
+html[data-theme="dark"] .mini-text span {
+  color: #f8fafc;
+}
+
+html[data-theme="dark"] .mini-text p {
+  color: #cbd5e1;
+}
+
+html[data-theme="dark"] .form-box {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .form-box h2,
+html[data-theme="dark"] .form-group label {
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .form-box > p,
+html[data-theme="dark"] .login-footer-text,
+html[data-theme="dark"] .input-hint {
+  color: var(--text-light);
+}
+
+html[data-theme="dark"] .divider::before {
+  background: var(--border-color);
+}
+
+html[data-theme="dark"] .divider span {
+  background: var(--card-bg);
+  color: var(--text-light);
+}
+
+html[data-theme="dark"] .btn-google-login {
+  background: var(--card-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}

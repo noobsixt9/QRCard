@@ -339,3 +339,73 @@
     width: 100%;
   }
 }
+
+/* =========================
+   DARK THEME OVERRIDES
+========================= */
+html[data-theme="dark"] .orders-page,
+html[data-theme="dark"] .orders-main {
+  background: var(--page-bg);
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .orders-header h1,
+html[data-theme="dark"] .order-details-card h2,
+html[data-theme="dark"] .order-summary-card h2,
+html[data-theme="dark"] .order-field-group label,
+html[data-theme="dark"] .summary-total h3 {
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .orders-header p,
+html[data-theme="dark"] .summary-list p,
+html[data-theme="dark"] .summary-list strong,
+html[data-theme="dark"] .selected-card-preview span {
+  color: var(--text-light);
+}
+
+html[data-theme="dark"] .order-details-card,
+html[data-theme="dark"] .order-summary-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .quantity-options button,
+html[data-theme="dark"] .paper-options button {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .quantity-options button.active,
+html[data-theme="dark"] .paper-options button.active {
+  background: #1e1b4b;
+  border-color: #5b68e8;
+  color: #818cf8;
+}
+
+html[data-theme="dark"] .order-field-group textarea,
+html[data-theme="dark"] .order-field-group input {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .selected-card-preview {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .summary-list {
+  border-bottom-color: var(--border-color);
+}
+
+html[data-theme="dark"] .order-note-card {
+  background: #451a03;
+  border-color: #78350f;
+}
+
+html[data-theme="dark"] .order-note-card h3,
+html[data-theme="dark"] .order-note-card p {
+  color: #fef08a;
+}

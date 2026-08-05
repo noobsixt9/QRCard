@@ -541,9 +541,7 @@ html[data-theme="dark"] .try-preview-heading h2,
 html[data-theme="dark"] .preview-form-header h3,
 html[data-theme="dark"] .preview-display-header h3,
 html[data-theme="dark"] .preview-input-group label,
-html[data-theme="dark"] .preview-control-block label,
-html[data-theme="dark"] .live-card-top h3,
-html[data-theme="dark"] .live-qr-box {
+html[data-theme="dark"] .preview-control-block label {
   color: var(--text-main);
 }
 
@@ -567,23 +565,113 @@ html[data-theme="dark"] .preview-option-row button {
 
 html[data-theme="dark"] .preview-option-row button:hover,
 html[data-theme="dark"] .preview-option-row button.active {
-  background: var(--page-bg);
+  background: #5b68e8;
   border-color: #5b68e8;
-  color: #5b68e8;
+  color: #ffffff;
 }
 
+/* Base dark live card preview */
 html[data-theme="dark"] .live-card-preview {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .live-card-top h3 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .live-card-top p,
+html[data-theme="dark"] .live-info-list span {
+  color: #e2e8f0;
 }
 
 html[data-theme="dark"] .live-qr-box {
-  background: var(--page-bg);
-  border: 1px solid var(--border-color);
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #ffffff;
 }
 
-html[data-theme="dark"] .live-avatar {
-  background: var(--page-bg);
+html[data-theme="dark"] .live-qr-box small {
+  color: #cbd5e1;
+}
+
+/* Template variations in Dark Mode */
+html[data-theme="dark"] .template-minimal {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .template-professional {
+  background: #0f172a;
+  border-color: #1e293b;
+}
+
+html[data-theme="dark"] .template-professional .live-card-top h3,
+html[data-theme="dark"] .template-professional .live-qr-box strong {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .template-professional .live-card-top p,
+html[data-theme="dark"] .template-professional .live-info-list span {
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] .template-professional .live-qr-box {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .template-creative {
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  border-color: #4338ca;
+}
+
+html[data-theme="dark"] .template-creative .live-card-top h3 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .template-creative .live-card-top p,
+html[data-theme="dark"] .template-creative .live-info-list span {
+  color: #e0e7ff;
+}
+
+html[data-theme="dark"] .template-creative .live-qr-box {
+  background: #1e1b4b;
+  border-color: #4338ca;
+}
+
+/* Color Themes in Dark Mode */
+html[data-theme="dark"] .theme-blue .live-avatar {
+  background: #1e1b4b;
+  color: #818cf8;
+}
+html[data-theme="dark"] .theme-blue .live-info-list i {
+  color: #818cf8;
+}
+
+html[data-theme="dark"] .theme-purple .live-avatar {
+  background: #2e1065;
+  color: #c084fc;
+}
+html[data-theme="dark"] .theme-purple .live-info-list i {
+  color: #c084fc;
+}
+
+html[data-theme="dark"] .theme-green .live-avatar {
+  background: #052e16;
+  color: #4ade80;
+}
+html[data-theme="dark"] .theme-green .live-info-list i {
+  color: #4ade80;
+}
+
+html[data-theme="dark"] .theme-dark .live-avatar {
+  background: #334155;
+  color: #f3f4f6;
+}
+html[data-theme="dark"] .theme-dark .live-info-list i {
+  color: #f3f4f6;
 }
 
 html[data-theme="dark"] .preview-action-buttons button {
@@ -596,25 +684,4 @@ html[data-theme="dark"] .preview-action-buttons .order-btn {
   background: #5b68e8;
   color: #ffffff;
   border: none;
-}
-
-/* Ensure template custom colors still take priority over dark theme overrides */
-html[data-theme="dark"] .template-professional {
-  background: #111827 !important;
-  border-color: #1f2937 !important;
-}
-
-html[data-theme="dark"] .template-professional h3,
-html[data-theme="dark"] .template-professional strong {
-  color: #ffffff !important;
-}
-
-html[data-theme="dark"] .template-professional span,
-html[data-theme="dark"] .template-professional small {
-  color: #cbd5e1 !important;
-}
-
-html[data-theme="dark"] .template-professional .live-qr-box {
-  background: #1f2937 !important;
-  border-color: #334155 !important;
 }

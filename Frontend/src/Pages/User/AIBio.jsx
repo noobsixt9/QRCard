@@ -207,21 +207,6 @@ const AIBio = () => {
             </p>
 
             <form className="bio-form" onSubmit={generateAIBio}>
-              <div className="ai-generate-wrapper" style={{ marginBottom: "24px" }}>
-                <button 
-                  type="submit" 
-                  className="generate-bio-btn" 
-                  style={{ width: "100%", background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)" }}
-                  disabled={generating}
-                >
-                  {generating ? "Generating AI Bio..." : "✨ Generate AI Bio (From Profile)"}
-                </button>
-              </div>
-
-              <hr style={{ border: "0", borderTop: "1px solid var(--border-color)", margin: "24px 0" }} />
-
-              <h3 style={{ marginBottom: "12px", fontSize: "16px" }}>Local Template Customization</h3>
-
               <div className="bio-form-group">
                 <label>Profession</label>
                 <input
@@ -286,12 +271,11 @@ const AIBio = () => {
               </div>
 
               <button 
-                type="button" 
+                type="submit" 
                 className="generate-bio-btn" 
-                onClick={generateOfflineBio}
-                style={{ background: "#4b5563" }}
+                disabled={generating}
               >
-                Generate Local Template
+                {generating ? "Generating..." : "Generate Bio"}
               </button>
             </form>
           </div>
@@ -310,15 +294,24 @@ const AIBio = () => {
                   className="use-bio-btn"
                   onClick={useThisBio}
                 >
-                  Save to Profile
+                  Use This Bio
                 </button>
 
                 <button
                   type="button"
                   className="secondary-bio-btn"
+                  disabled={generating}
+                  onClick={generateAIBio}
+                >
+                  {generating ? "Generating..." : "Regenerate"}
+                </button>
+
+                <button
+                  type="button"
+                  className="outline-bio-btn"
                   onClick={copyBio}
                 >
-                  Copy Bio
+                  Copy
                 </button>
               </div>
 

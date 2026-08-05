@@ -388,6 +388,10 @@ const DigitalProfile = () => {
     website: "",
     address: "",
     bio: "",
+    linkedin: "",
+    github: "",
+    twitter: "",
+    instagram: "",
   });
 
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -449,6 +453,7 @@ const DigitalProfile = () => {
         }
 
         const profile = result.data?.profile || result.data || {};
+        const social = profile.social_links || {};
 
         setProfileData({
           fullName: profile.full_name || "",
@@ -459,6 +464,10 @@ const DigitalProfile = () => {
           website: profile.website || "",
           address: profile.address || "",
           bio: profile.bio || "",
+          linkedin: social.linkedin || "",
+          github: social.github || "",
+          twitter: social.twitter || "",
+          instagram: social.instagram || "",
         });
 
         setProfilePhoto(profile.avatar_url || null);
@@ -667,6 +676,12 @@ const DigitalProfile = () => {
           website: profileData.website.trim(),
           address: profileData.address.trim(),
           bio: profileData.bio.trim(),
+          social_links: {
+            linkedin: profileData.linkedin?.trim() || undefined,
+            github: profileData.github?.trim() || undefined,
+            twitter: profileData.twitter?.trim() || undefined,
+            instagram: profileData.instagram?.trim() || undefined,
+          },
         }),
       });
 
@@ -752,63 +767,67 @@ const DigitalProfile = () => {
             <h2>Basic Information</h2>
 
             <form className="profile-form" onSubmit={handleSaveProfile}>
-              <div className="form-group">
-                <label>Full Name</label>
+              <div className="contact-row">
+                <div className="form-group">
+                  <label>Full Name</label>
 
-                <input
-                  type="text"
-                  name="fullName"
-                  value={profileData.fullName}
-                  onChange={handleChange}
-                  placeholder="Your Name"
-                />
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={profileData.fullName}
+                    onChange={handleChange}
+                    placeholder="Your Name"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Job Title</label>
+
+                  <input
+                    type="text"
+                    name="jobTitle"
+                    value={profileData.jobTitle}
+                    onChange={handleChange}
+                    placeholder="Backend Developer"
+                  />
+                </div>
               </div>
 
-              <div className="form-group">
-                <label>Job Title</label>
+              <div className="contact-row">
+                <div className="form-group">
+                  <label>Company</label>
 
-                <input
-                  type="text"
-                  name="jobTitle"
-                  value={profileData.jobTitle}
-                  onChange={handleChange}
-                  placeholder="Backend Developer"
-                />
-              </div>
+                  <input
+                    type="text"
+                    name="company"
+                    value={profileData.company}
+                    onChange={handleChange}
+                    placeholder="QR Card Nepal"
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Company</label>
+                <div className="photo-group">
+                  <label>Profile Photo</label>
 
-                <input
-                  type="text"
-                  name="company"
-                  value={profileData.company}
-                  onChange={handleChange}
-                  placeholder="QR Card Nepal"
-                />
-              </div>
+                  <div className="photo-row">
+                    <div className="profile-avatar">
+                      {profilePhoto ? (
+                        <img src={profilePhoto} alt="Profile" />
+                      ) : (
+                        initials
+                      )}
+                    </div>
 
-              <div className="photo-group">
-                <label>Profile Photo</label>
+                    <label className="upload-photo-btn">
+                      Upload Photo
 
-                <div className="photo-row">
-                  <div className="profile-avatar">
-                    {profilePhoto ? (
-                      <img src={profilePhoto} alt="Profile" />
-                    ) : (
-                      initials
-                    )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                      />
+                    </label>
                   </div>
-
-                  <label className="upload-photo-btn">
-                    Upload Photo
-
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handlePhotoUpload}
-                    />
-                  </label>
                 </div>
               </div>
 
@@ -816,55 +835,61 @@ const DigitalProfile = () => {
                 <h2>Contact Details</h2>
               </div>
 
-              <div className="form-group">
-                <label>Email Address</label>
+              <div className="contact-row">
+                <div className="form-group">
+                  <label>Email Address</label>
 
-                <input
-                  type="email"
-                  name="email"
-                  value={profileData.email}
-                  onChange={handleChange}
-                  placeholder="xyz@gmail.com"
-                />
+                  <input
+                    type="email"
+                    name="email"
+                    value={profileData.email}
+                    onChange={handleChange}
+                    placeholder="xyz@gmail.com"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Phone Number</label>
+
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={profileData.phone}
+                    onChange={handleChange}
+                    inputMode="numeric"
+                    maxLength="15"
+                    placeholder="9800000000"
+                  />
+                </div>
               </div>
 
-              <div className="form-group">
-                <label>Phone Number</label>
+              <div className="contact-row">
+                <div className="form-group">
+                  <label>Website</label>
 
-                <input
-                  type="tel"
-                  name="phone"
-                  value={profileData.phone}
-                  onChange={handleChange}
-                  inputMode="numeric"
-                  maxLength="15"
-                  placeholder="9800000000"
-                />
+                  <input
+                    type="text"
+                    name="website"
+                    value={profileData.website}
+                    onChange={handleChange}
+                    placeholder="www.qrcard.com"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Address</label>
+
+                  <input
+                    type="text"
+                    name="address"
+                    value={profileData.address}
+                    onChange={handleChange}
+                    placeholder="Kathmandu"
+                  />
+                </div>
               </div>
 
-              <div className="form-group">
-                <label>Website</label>
 
-                <input
-                  type="text"
-                  name="website"
-                  value={profileData.website}
-                  onChange={handleChange}
-                  placeholder="www.qrcard.com"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Address</label>
-
-                <input
-                  type="text"
-                  name="address"
-                  value={profileData.address}
-                  onChange={handleChange}
-                  placeholder="Kathmandu"
-                />
-              </div>
 
               <div className="form-group full-width">
                 <label>Short Bio</label>
@@ -956,8 +981,10 @@ const DigitalProfile = () => {
             </div>
 
             <div className="profile-status-card">
-              <h3>Profile Completeness</h3>
-              <h1>{completenessScore}%</h1>
+              <div className="status-card-header">
+                <h3>Profile Completeness</h3>
+                <span className="completeness-badge">{completenessScore}%</span>
+              </div>
 
               <div className="progress-bar">
                 <span
@@ -967,38 +994,42 @@ const DigitalProfile = () => {
                 />
               </div>
 
-              <p className={profileData.fullName ? "success" : "error"}>
-                {profileData.fullName ? "✓" : "×"} Basic information added
-              </p>
+              <div className="status-checklist">
+                <p className={profileData.fullName && profileData.jobTitle ? "success" : "error"}>
+                  {profileData.fullName && profileData.jobTitle ? "✓" : "×"} Basic information added
+                </p>
 
-              <p
-                className={
-                  profileData.email && profileData.phone
-                    ? "success"
-                    : "error"
-                }
-              >
-                {profileData.email && profileData.phone ? "✓" : "×"} Contact
-                information added
-              </p>
+                <p
+                  className={
+                    profileData.email && profileData.phone
+                      ? "success"
+                      : "error"
+                  }
+                >
+                  {profileData.email && profileData.phone ? "✓" : "×"} Contact
+                  information added
+                </p>
 
-              <p className="error">× Social links missing</p>
+                <p className="error">× Social links missing</p>
 
-              <p className={profileData.bio ? "success" : "error"}>
-                {profileData.bio ? "✓ Bio added" : "× Bio needs improvement"}
-              </p>
+                <p className={profileData.bio ? "success" : "error"}>
+                  {profileData.bio ? "✓ Bio added" : "× Bio needs improvement"}
+                </p>
+              </div>
             </div>
 
             <div className="ai-suggestion-card">
-              <h3>AI Suggestion</h3>
+              <div className="ai-badge">✨ AI Smart Helper</div>
+              <h3>AI Bio Suggestion</h3>
 
               <p>
-                Your profile can be improved by adding a stronger professional
-                bio and social links.
+                {completenessScore < 100
+                  ? "Boost your profile reach by generating an AI bio and filling in social links."
+                  : "Your profile is looking great! Keep your bio and contact info updated."}
               </p>
 
               <button type="button" onClick={() => navigate("/ai-bio")}>
-                Generate Bio
+                {completenessScore < 100 ? "Generate Bio" : "Refine Bio"}
               </button>
             </div>
           </aside>
