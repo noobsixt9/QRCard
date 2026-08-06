@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum QRType {
+  ONLINE
+  OFFLINE
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id            String          @id @default(uuid()) @db.Uuid
+  firebase_uid  String?         @unique
+  email         String
+  username      String          @unique
+  password_hash String?
+  reset_token   String?
+  reset_expires DateTime?
+  role          Role            @default(USER)
+  is_active     Boolean         @default(true)
+  is_verified   Boolean         @default(false)
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+
+  profile       Profile?
+  qr_codes      QRCode[]
+  orders        PrintingOrder[]
+
+  @@index([email])
+  @@index([username])
+}
+
+model Profile {
+  id                 String   @id @default(uuid()) @db.Uuid
+  user_id            String   @unique @db.Uuid
+  user               User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  full_name          String?
+  job_title          String?
+  company            String?
+  bio                String?
+  phone              String?
+  public_email       String?
+  website            String?
+  address            String?
+  avatar_url         String?
+  social_links       Json?
+  completeness_score Int      @default(0)
+
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  @@index([user_id])
+}
+
+model QRCode {
+  id            String   @id @default(uuid()) @db.Uuid
+  user_id       String   @db.Uuid
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  type          QRType
+  qr_data_url   String   @db.Text
+  vcard_content String?  @db.Text
+  scan_count    Int      @default(0)
+
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@unique([user_id, type])
+  @@index([user_id])
+}
+
+model PrintingOrder {
+  id            String      @id @default(uuid()) @db.Uuid
+  user_id       String      @db.Uuid
+  user          User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  vendor_id     String?     @db.Uuid
+  vendor        Vendor?     @relation(fields: [vendor_id], references: [id])
+
+  design_config Json
+  qr_type       QRType
+  quantity      Int
+  status        OrderStatus @default(PENDING)
+  notes         String?
+
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+
+  @@index([user_id])
+  @@index([status])
+  @@index([vendor_id])
+}
+
+model SignupVerification {
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique
+  username      String
+  password_hash String
+  otp_hash      String
+  otp_expires   DateTime
+  created_at    DateTime @default(now())
+
+  @@index([email])
+  @@index([otp_expires])
+}
+
+model Vendor {
+  id         String          @id @default(uuid()) @db.Uuid
+  name       String
+  email      String          @unique
+  phone      String?
+  address    String?
+  notes      String?
+  is_active  Boolean         @default(true)
+
+  orders     PrintingOrder[]
+
+  created_at DateTime        @default(now())
+  updated_at DateTime        @updatedAt
+}
+
+model OTP {
+  id         String   @id @default(uuid()) @db.Uuid
+  email      String
+  code       String
+  purpose    String   // REGISTRATION or PASSWORD_RESET
+  expires_at DateTime
+  created_at DateTime @default(now())
+
+  @@index([email])
+}

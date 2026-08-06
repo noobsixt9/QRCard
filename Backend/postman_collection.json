@@ -1,0 +1,1155 @@
+{
+  "info": {
+    "name": "QRCard Backend API",
+    "description": "# QRCard Backend API\n\nThis Postman collection documents the current QRCard backend API for authentication, profile management, QR generation, AI suggestions, printing orders, and admin operations.\n\n## Base URL\n- `{{baseUrl}}` defaults to `http://localhost:5001`\n\n## Authentication\nThis API supports two auth flows:\n- App JWT from `POST /api/auth/register` or `POST /api/auth/login`\n- Firebase ID token for social auth sync via `POST /api/auth/sync`\n\nSet `{{authToken}}` before calling protected endpoints.\n\n## Common response shape\nSuccessful responses usually return:\n```json\n{\n  \"success\": true,\n  \"message\": \"Optional message\",\n  \"data\": {}\n}\n```\n\nValidation failures usually return:\n```json\n{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": [\n    { \"field\": \"fieldName\", \"message\": \"Why it failed\" }\n  ]\n}\n```\n\n## Notes\n- Admin routes require an authenticated user with role `ADMIN`.\n- User routes require role `USER` or `ADMIN`.\n- For avatar upload, switch the request body to `form-data` in Postman and attach a file under the `avatar` key.\n- Path placeholders like `:id`, `:username`, and `:type` should be replaced with real values before sending the request.\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check whether the API server is up.\n\nNo authentication required."
+          },
+          "response": []
+        }
+      ],
+      "description": "Basic service availability check. Use this first to verify the backend is running and reachable."
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /api/auth/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"username\": \"user_123\",\n  \"password\": \"SecurePass@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Create a new email/password account.\n\nReturns an app JWT token and the newly created user. Use this as the primary non-social registration flow."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/auth/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"SecurePass@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Log in with email and password.\n\nReturns an app JWT token. Save the token into `{{authToken}}` to call protected endpoints."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/auth/forgot-password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/forgot-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "forgot-password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Start the password reset flow.\n\nCurrent implementation generates and stores a reset token, then returns token data for manual testing. In a production-ready flow, this would usually email a reset link or code."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/auth/reset-password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "reset-password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"reset-token-here\",\n  \"password\": \"NewSecurePass@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Complete the password reset flow using a previously generated reset token.\n\nSubmit the token from the forgot-password step with the new password."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/auth/sync",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/sync",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "sync"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"user_123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Link or create a backend user from a Firebase-authenticated social account.\n\nSend a Firebase ID token in `Authorization`. Useful when social OAuth is used as an additional auth method."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/auth/me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Return the currently authenticated backend user.\n\nRequires a valid app JWT or Firebase-authenticated synced user."
+          },
+          "response": []
+        }
+      ],
+      "description": "Authentication and account lifecycle endpoints. Includes email/password register/login, password reset flow, Firebase social account sync, and current-user lookup."
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "GET /api/profile/public/:username",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/public/:username",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "profile",
+                "public",
+                ":username"
+              ]
+            },
+            "description": "Fetch the public profile by username.\n\nThis is the endpoint typically used by QR links and public visiting card views. No authentication required."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "profile"
+              ]
+            },
+            "description": "Fetch the full private profile for the currently authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "profile"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Rajan\",\n  \"job_title\": \"Developer\",\n  \"company\": \"QRCard\",\n  \"bio\": \"Short bio\",\n  \"phone\": \"+9779800000000\",\n  \"public_email\": \"public@example.com\",\n  \"website\": \"https://example.com\",\n  \"address\": \"Pokhara\",\n  \"social_links\": {\n    \"linkedin\": \"https://linkedin.com/in/rajan\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Update the current user's profile fields.\n\nThis is the main endpoint used by the profile form to save visiting card details."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/profile/avatar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/avatar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "profile",
+                "avatar"
+              ]
+            },
+            "description": "Upload or replace the current user's avatar image.\n\nUse `form-data` in Postman with a file field named `avatar`."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/profile/avatar",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/avatar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "profile",
+                "avatar"
+              ]
+            },
+            "description": "Remove the current user's avatar."
+          },
+          "response": []
+        }
+      ],
+      "description": "Profile management endpoints for the digital visiting card. Includes public profile lookup, private profile read/update, and avatar management."
+    },
+    {
+      "name": "QR",
+      "item": [
+        {
+          "name": "POST /api/qr/online",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/qr/online",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "qr",
+                "online"
+              ]
+            },
+            "description": "Generate or regenerate the online QR code that points to the user's public profile URL."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/qr/offline",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/qr/offline",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "qr",
+                "offline"
+              ]
+            },
+            "description": "Generate or regenerate the offline QR code that contains vCard contact information."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/qr",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/qr",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "qr"
+              ]
+            },
+            "description": "Get the current user's saved QR code records."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/qr/:type",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/qr/:type",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "qr",
+                ":type"
+              ]
+            },
+            "description": "Delete a QR code by type. Replace `:type` with `ONLINE` or `OFFLINE`."
+          },
+          "response": []
+        }
+      ],
+      "description": "QR code generation and retrieval endpoints. Supports online QR (profile URL) and offline QR (vCard payload)."
+    },
+    {
+      "name": "AI",
+      "item": [
+        {
+          "name": "POST /api/ai/bio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/bio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "bio"
+              ]
+            },
+            "description": "Generate a professional bio suggestion from the user's current profile data.\n\nRequires enough profile information to be useful."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/ai/completeness",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/completeness",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "completeness"
+              ]
+            },
+            "description": "Return profile completeness score, level, and AI-style suggestions for missing information."
+          },
+          "response": []
+        }
+      ],
+      "description": "AI-assisted profile helpers. These endpoints generate bio suggestions and profile completeness insights for authenticated users."
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "POST /api/orders",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"design_config\": {\n    \"template\": \"minimal-light\",\n    \"primary_color\": \"#1a1a2e\",\n    \"secondary_color\": \"#ffffff\",\n    \"show_avatar\": true,\n    \"font\": \"inter\"\n  },\n  \"qr_type\": \"ONLINE\",\n  \"quantity\": 100,\n  \"notes\": \"Urgent print\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Create a new card printing order for the current user.\n\nRequires an existing QR of the selected type."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders?page=&limit=&status=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "List the current user's printing orders.\n\nSupports optional pagination and status filtering."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/orders/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                ":id"
+              ]
+            },
+            "description": "Get one printing order belonging to the current user."
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /api/orders/:id/cancel",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/:id/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                ":id",
+                "cancel"
+              ]
+            },
+            "description": "Cancel a pending printing order.\n\nOnly pending orders can be cancelled."
+          },
+          "response": []
+        }
+      ],
+      "description": "Printing order endpoints for authenticated users. Includes placing orders, viewing order history, reading a single order, and cancelling pending orders."
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "GET /api/admin/dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "dashboard"
+              ]
+            },
+            "description": "Return admin dashboard metrics including user counts, order counts, and recent orders."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/orders?status=&vendor_id=&page=&limit=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "page",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "List all printing orders for admin review.\n\nSupports optional filters such as status and vendor assignment."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/orders/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/orders/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "orders",
+                ":id"
+              ]
+            },
+            "description": "Return full details for a single order, including related user and vendor data."
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /api/admin/orders/:id/status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/orders/:id/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "orders",
+                ":id",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Update an order's workflow status.\n\nTypical values include `PENDING`, `CONFIRMED`, `COMPLETED`, and `CANCELLED`."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/admin/orders/:id/send-to-vendor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/orders/:id/send-to-vendor",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "orders",
+                ":id",
+                "send-to-vendor"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendor_id\": \"550e8400-e29b-41d4-a716-446655440000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Assign an order to a vendor and trigger the vendor delivery flow."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users?page=&limit=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "List all users for admin management.\n\nSupports pagination."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/users/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "users",
+                ":id"
+              ]
+            },
+            "description": "Get one user's details, including profile and order history."
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /api/admin/users/:id/status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/:id/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "users",
+                ":id",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Activate or deactivate a user account."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/admin/vendors",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vendors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "vendors"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Print Nepal\",\n  \"email\": \"vendor@example.com\",\n  \"phone\": \"+9779800000000\",\n  \"address\": \"Kathmandu\",\n  \"notes\": \"Fast turnaround\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Create a new print vendor."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/vendors",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vendors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "vendors"
+              ]
+            },
+            "description": "List active print vendors."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/vendors/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vendors/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "vendors",
+                ":id"
+              ]
+            },
+            "description": "Get a single vendor and its related order information."
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/admin/vendors/:id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vendors/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "vendors",
+                ":id"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Print Nepal Updated\",\n  \"email\": \"vendor@example.com\",\n  \"phone\": \"+9779800000001\",\n  \"address\": \"Kathmandu\",\n  \"notes\": \"Updated details\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Update an existing vendor record."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/admin/vendors/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vendors/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "vendors",
+                ":id"
+              ]
+            },
+            "description": "Soft-delete a vendor by marking it inactive."
+          },
+          "response": []
+        }
+      ],
+      "description": "Admin-only endpoints for dashboard metrics, user management, order processing, vendor assignment, and vendor CRUD."
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001"
+    },
+    {
+      "key": "authToken",
+      "value": ""
+    }
+  ]
+}
