@@ -1,5 +1,5 @@
 const { getResend } = require('../config/mailer')
-const { orderReceiptEmail, vendorOrderEmail, signupOtpEmail } = require('./emailTemplates')
+const { orderReceiptEmail, vendorOrderEmail, signupOtpEmail, passwordResetEmail } = require('./emailTemplates')
 
 const SIGNUP_OTP_EXPIRY_MINUTES = 10
 
@@ -40,12 +40,27 @@ async function sendOrderConfirmationEmail(order, user, pdfBuffer) {
   }
 }
 
-async function sendVendorOrderEmail(order, user, vendor, pdfBuffer) {
+async function sendVendorOrderEmail(order, user, vendor, pdfBuffer, svgBuffer) {
+  const attachments = []
+
+  if (pdfBuffer) {
+    attachments.push({ filename: `card-preview-${order.id}.pdf`, content: pdfBuffer })
+  }
+
+  if (svgBuffer) {
+    // SVG as editable/print-ready vector file
+    attachments.push({
+      filename: `card-design-${order.id}.svg`,
+      content: svgBuffer,
+      contentType: 'image/svg+xml',
+    })
+  }
+
   const result = await sendEmail({
     to: vendor.email,
-    subject: `QRCard Print Order #${order.id}`,
+    subject: `QRCard Print Order #${order.id.slice(0, 8).toUpperCase()} — ${user.username}`,
     html: vendorOrderEmail(order, user, vendor),
-    attachments: [{ filename: `order-${order.id}.pdf`, content: pdfBuffer }],
+    attachments,
   })
 
   if (!result.sent && result.reason === 'not_configured') {
@@ -53,11 +68,14 @@ async function sendVendorOrderEmail(order, user, vendor, pdfBuffer) {
   }
 }
 
-async function sendSignupOtpEmail(email, otp) {
+async function sendSignupOtpEmail(email, otp, purpose) {
+  const isReset = purpose === 'PASSWORD_RESET'
   const result = await sendEmail({
     to: email,
-    subject: 'Your QRCard signup verification code',
-    html: signupOtpEmail(otp, SIGNUP_OTP_EXPIRY_MINUTES),
+    subject: isReset ? 'QRCard - Password Reset OTP' : 'Your QRCard signup verification code',
+    html: isReset
+      ? passwordResetEmail(otp, SIGNUP_OTP_EXPIRY_MINUTES)
+      : signupOtpEmail(otp, SIGNUP_OTP_EXPIRY_MINUTES),
   })
 
   if (!result.sent) {
@@ -73,6 +91,6 @@ async function sendSignupOtpEmail(email, otp) {
 module.exports = {
   sendOrderConfirmationEmail,
   sendVendorOrderEmail,
-  sendSignupOtpEmail,
+  sendSignupOtpEmail,   // handles both SIGNUP and PASSWORD_RESET via purpose param
   SIGNUP_OTP_EXPIRY_MINUTES,
 }

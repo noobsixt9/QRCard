@@ -12,9 +12,28 @@ async function getOwnProfile(userId) {
   return profile
 }
 
+function normalizeUrl(v) {
+  if (!v || v.trim() === '') return null
+  const t = v.trim()
+  if (t.startsWith('http://') || t.startsWith('https://')) return t
+  return `https://${t}`
+}
+
 async function updateProfile(userId, data) {
   const payload = { ...data }
-  if (payload.website === '') payload.website = null
+
+  // Normalize URL fields — empty string → null, partial URL → https://
+  if ('website' in payload) payload.website = normalizeUrl(payload.website)
+  if ('public_email' in payload && payload.public_email === '') payload.public_email = null
+  if ('phone'   in payload && payload.phone   === '') payload.phone   = null
+  if ('address' in payload && payload.address === '') payload.address = null
+  if ('bio'     in payload && payload.bio     === '') payload.bio     = null
+
+  if (payload.social_links && typeof payload.social_links === 'object') {
+    payload.social_links = Object.fromEntries(
+      Object.entries(payload.social_links).map(([k, v]) => [k, normalizeUrl(v)])
+    )
+  }
 
   const existing = await prisma.profile.findUnique({ where: { user_id: userId } })
   const merged = { ...existing, ...payload }
@@ -72,7 +91,7 @@ async function getPublicProfile(username) {
     include: { profile: true },
   })
 
-  if (!user || !user.is_active || !user.profile) {
+  if (!user || !user.is_active || !user.profile || user.profile.is_public === false) {
     const err = new Error('Profile not found')
     err.status = 404
     throw err

@@ -27,8 +27,9 @@ const allowedOrigins = new Set(
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:5175",
-    "https://chic-biscotti-aa41eb.netlify.app/",
-    "https://qrcard.dev/",
+    "https://backend-onrender-qbu7.onrender.com",
+    "https://qrcard.dev",
+    "https://www.qrcard.dev",
   ].filter(Boolean),
 );
 

@@ -1,5 +1,5 @@
 const prisma = require('../../config/db')
-const { getGeminiModel } = require('../../config/gemini')
+const { getGroqClient, GROQ_MODEL } = require('../../config/groq')
 const { calculateCompleteness, getCompletenessLevel } = require('../../utils/completeness')
 
 async function generateBio(userId) {
@@ -11,29 +11,54 @@ async function generateBio(userId) {
     throw err
   }
 
-  const model = getGeminiModel()
-  if (!model) {
-    const err = new Error('Gemini API is not configured')
+  const groq = getGroqClient()
+  if (!groq) {
+    const err = new Error('AI service is not configured')
     err.status = 502
     throw err
   }
 
-  const prompt = `Generate a concise, professional bio in 2-3 sentences for a digital visiting card.
-Write in first person (use "I" / "my"). Do not include any extra commentary or formatting.
+  const details = [
+    `Name: ${profile.full_name}`,
+    `Job Title: ${profile.job_title}`,
+    profile.company      ? `Company: ${profile.company}`   : null,
+    profile.website      ? `Website: ${profile.website}`   : null,
+    profile.address      ? `Location: ${profile.address}`  : null,
+    profile.bio          ? `Current bio hint: ${profile.bio}` : null,
+  ].filter(Boolean).join('\n')
 
-Name: ${profile.full_name}
-Job Title: ${profile.job_title}
-Company: ${profile.company || 'N/A'}
-Website: ${profile.website || 'N/A'}
-
-Bio:`
+  const messages = [
+    {
+      role: 'system',
+      content: `You are a professional bio writer for digital business cards.
+Write concise, engaging, third-person professional bios.
+Rules:
+- 2-3 sentences maximum
+- Third person (use the person's name)
+- Warm, confident, and specific — not generic
+- Mention their role and company naturally
+- End with what makes them valuable or their passion
+- Under 400 characters total
+- Output ONLY the bio text — no quotes, no labels, no extra text`,
+    },
+    {
+      role: 'user',
+      content: `Write a professional bio for:\n${details}`,
+    },
+  ]
 
   try {
-    const result = await model.generateContent(prompt)
-    const bio = result.response.text().trim()
+    const completion = await groq.chat.completions.create({
+      model:       GROQ_MODEL,
+      messages,
+      max_tokens:  150,
+      temperature: 0.7,
+    })
+    const bio = completion.choices[0]?.message?.content?.trim().replace(/^["']|["']$/g, '') || ''
     return { bio }
   } catch (err) {
-    const error = new Error('Gemini API unavailable')
+    console.error('Groq AI error:', err.message)
+    const error = new Error('AI service unavailable')
     error.status = 502
     throw error
   }
@@ -68,44 +93,45 @@ async function getCompletenessSuggestions(userId) {
     }
   }
 
-  const model = getGeminiModel()
-  if (!model) {
+  const groq = getGroqClient()
+  if (!groq) {
     return {
       score,
       level,
       missing_fields: missing,
-      suggestions: missing.map(
-        (field) => `Complete your ${field.replace(/_/g, ' ')} to improve your profile.`
-      ),
+      suggestions: missing.map((f) => `Complete your ${f.replace(/_/g, ' ')} to improve your profile.`),
     }
   }
 
-  const prompt = `A user's digital profile is ${score}% complete.
-Missing or incomplete fields: ${missing.join(', ')}.
-
-Give exactly 3 short, actionable suggestions (as a numbered list) to improve their profile.
-Each suggestion should be one sentence only. No extra commentary.`
-
   try {
-    const result = await model.generateContent(prompt)
-    const suggestions = parseSuggestions(result.response.text())
-
+    const completion = await groq.chat.completions.create({
+      model: GROQ_MODEL,
+      messages: [
+        {
+          role: 'system',
+          content: 'You give short, actionable profile improvement tips. Output exactly 3 numbered suggestions, one sentence each, no extra text.',
+        },
+        {
+          role: 'user',
+          content: `A user's digital visiting card profile is ${score}% complete. Missing fields: ${missing.join(', ')}. Give 3 specific tips to improve it.`,
+        },
+      ],
+      max_tokens: 120,
+      temperature: 0.5,
+    })
+    const suggestions = parseSuggestions(completion.choices[0]?.message?.content || '')
     return {
       score,
       level,
       missing_fields: missing,
-      suggestions: suggestions.length ? suggestions : missing.map(
-        (field) => `Add your ${field.replace(/_/g, ' ')}.`
-      ),
+      suggestions: suggestions.length ? suggestions : missing.map((f) => `Add your ${f.replace(/_/g, ' ')}.`),
     }
   } catch {
     return {
       score,
       level,
       missing_fields: missing,
-      suggestions: missing.map(
-        (field) => `Complete your ${field.replace(/_/g, ' ')} to improve your profile.`
-      ),
+      suggestions: missing.map((f) => `Complete your ${f.replace(/_/g, ' ')} to improve your profile.`),
     }
   }
 }

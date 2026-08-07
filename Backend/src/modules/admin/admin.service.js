@@ -3,6 +3,7 @@ const orderService = require('../orders/order.service')
 const vendorService = require('../vendor/vendor.service')
 const { parsePagination, paginationMeta } = require('../../utils/pagination')
 const { generateCardPDF } = require('../../utils/pdf')
+const { generateCardSvg } = require('../../utils/cardSvg')
 const { sendOrderConfirmationEmail, sendVendorOrderEmail } = require('../../utils/mailService')
 
 async function getDashboard() {
@@ -89,6 +90,39 @@ async function getUserDetail(userId) {
   return safeUser
 }
 
+async function createUser(data) {
+  const bcrypt = require('bcrypt')
+  const { username, email, password, role } = data
+
+  const exists = await prisma.user.findFirst({
+    where: { OR: [{ email }, { username }] },
+  })
+  if (exists) {
+    const err = new Error(
+      exists.email === email ? 'Email already in use' : 'Username already taken'
+    )
+    err.status = 409
+    throw err
+  }
+
+  const password_hash = await bcrypt.hash(password, 12)
+
+  const user = await prisma.user.create({
+    data: {
+      email,
+      username,
+      password_hash,
+      role: role === 'ADMIN' ? 'ADMIN' : 'USER',
+      is_active:   true,
+      is_verified: true,
+      profile: { create: {} },
+    },
+    select: { id: true, email: true, username: true, role: true, is_active: true, created_at: true },
+  })
+
+  return user
+}
+
 async function updateUserStatus(userId, isActive) {
   const user = await prisma.user.findUnique({ where: { id: userId } })
   if (!user) {
@@ -116,20 +150,14 @@ async function updateOrderStatus(orderId, status) {
     status
   )
 
+  // On CONFIRMED → send user a confirmation email with PDF card preview
   if (status === 'CONFIRMED' && previousStatus !== 'CONFIRMED') {
     const qr = await prisma.qRCode.findUnique({
-      where: {
-        user_id_type: { user_id: order.user_id, type: order.qr_type },
-      },
+      where: { user_id_type: { user_id: order.user_id, type: order.qr_type } },
     })
 
     const profile = userWithProfile.profile || {}
-    const pdfBuffer = await generateCardPDF(
-      profile,
-      qr?.qr_data_url,
-      order.design_config
-    )
-
+    const pdfBuffer = await generateCardPDF(profile, qr?.qr_data_url, order.design_config)
     await sendOrderConfirmationEmail(order, userWithProfile, pdfBuffer).catch(console.error)
   }
 
@@ -140,9 +168,13 @@ async function sendOrderToVendor(orderId, vendorId) {
   const order = await orderService.getOrderById(orderId)
   const vendor = await vendorService.getActiveVendor(vendorId)
 
+  // Assigning to vendor automatically moves status to PROCESSING
   const updated = await prisma.printingOrder.update({
     where: { id: orderId },
-    data: { vendor_id: vendorId },
+    data: {
+      vendor_id: vendorId,
+      status: 'PROCESSING',
+    },
     include: {
       user: { include: { profile: true } },
       vendor: true,
@@ -150,24 +182,28 @@ async function sendOrderToVendor(orderId, vendorId) {
   })
 
   const qr = await prisma.qRCode.findUnique({
-    where: {
-      user_id_type: { user_id: order.user_id, type: order.qr_type },
-    },
+    where: { user_id_type: { user_id: order.user_id, type: order.qr_type } },
   })
 
-  const pdfBuffer = await generateCardPDF(
-    order.user.profile || {},
-    qr?.qr_data_url,
-    order.design_config
-  )
+  const profile = order.user.profile || {}
+  const designConfig = order.design_config || {}
 
-  await sendVendorOrderEmail(updated, order.user, vendor, pdfBuffer).catch(console.error)
+  // Generate both PDF (for preview) and SVG (for editing/printing)
+  const [pdfBuffer, svgString] = await Promise.all([
+    generateCardPDF(profile, qr?.qr_data_url, designConfig),
+    Promise.resolve(generateCardSvg(profile, qr?.qr_data_url, designConfig)),
+  ])
+
+  const svgBuffer = Buffer.from(svgString, 'utf-8')
+
+  await sendVendorOrderEmail(updated, order.user, vendor, pdfBuffer, svgBuffer).catch(console.error)
 
   return updated
 }
 
 module.exports = {
   getDashboard,
+  createUser,
   listUsers,
   getUserDetail,
   updateUserStatus,

@@ -24,6 +24,7 @@ router.post(
   adminController.sendToVendor
 )
 
+router.post('/users', adminController.createUser)
 router.get('/users', adminController.listUsers)
 router.get('/users/:id', adminController.getUser)
 router.patch('/users/:id/status', adminController.updateUserStatus)

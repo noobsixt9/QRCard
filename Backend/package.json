@@ -10,8 +10,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
-    "db:studio": "prisma studio",
-    "start": "node server.js"
+    "db:studio": "prisma studio"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -33,6 +32,7 @@
     "express": "^4.21.1",
     "express-rate-limit": "^7.4.1",
     "firebase-admin": "^13.6.0",
+    "groq-sdk": "^1.5.0",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",

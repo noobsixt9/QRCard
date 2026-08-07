@@ -1,0 +1,94 @@
+/* ── OTP VERIFICATION ── */
+
+.otp-inputs-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 28px 0;
+}
+
+.otp-input-field {
+  width: 44px;
+  height: 52px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  border: 2px solid var(--border-default);
+  border-radius: var(--r-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  outline: none;
+  transition: var(--transition-fast);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.otp-input-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+  background: var(--bg-surface);
+}
+
+.otp-input-field:not(:placeholder-shown) {
+  border-color: var(--accent-border);
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.recaptcha-outer-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.otp-resend-section {
+  text-align: center;
+  margin-top: 22px;
+}
+
+.countdown-text {
+  font-size: 13.5px;
+  color: var(--text-tertiary);
+}
+
+.countdown-text span {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.btn-resend-otp {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--r-md);
+  transition: var(--transition-fast);
+  font-family: inherit;
+}
+
+.btn-resend-otp:hover {
+  background: var(--accent-subtle);
+}
+
+/* Fix form-box height for OTP page */
+.auth-sidebar,
+.auth-form-section {
+  height: auto !important;
+  min-height: 500px;
+}
+
+.form-box {
+  height: auto !important;
+  min-height: 500px;
+  padding: 36px 20px !important;
+}
+
+[data-theme="dark"] .otp-input-field {
+  border-color: var(--border-default);
+}
+
+[data-theme="dark"] .otp-input-field:focus {
+  border-color: var(--accent);
+}

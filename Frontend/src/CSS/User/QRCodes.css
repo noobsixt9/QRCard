@@ -1,0 +1,93 @@
+/* QR CODES PAGE */
+.qr-page { display: flex; min-height: 100vh; background-color: var(--bg-base); }
+.qr-main { flex: 1; padding: 40px 52px; animation: fadeIn 0.4s ease-out; min-width: 0; }
+
+/* Header Banner */
+.qr-header-banner { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 32px 40px; background: var(--bg-surface); border-radius: var(--r-2xl); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm); margin-bottom: 36px; flex-wrap: wrap; }
+.qr-header-text h1 { font-size: 28px; font-weight: 800; color: var(--text-primary); margin: 0 0 6px; }
+.qr-header-text p { font-size: 14px; color: var(--text-secondary); margin: 0; line-height: 1.5; }
+.qr-header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.copy-link-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--accent-subtle); color: var(--accent); border: 1px solid var(--accent-border); border-radius: var(--r-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition-fast); }
+.copy-link-btn:hover { background: var(--accent); color: white; }
+.copy-link-btn svg { width: 16px; height: 16px; }
+
+/* QR Option Grid */
+.qr-option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+.qr-option-card { background: var(--bg-surface); border: 1.5px solid var(--border-subtle); border-radius: var(--r-2xl); padding: 32px; cursor: pointer; transition: var(--transition-base); display: flex; flex-direction: column; gap: 12px; }
+.qr-option-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--border-default); }
+.qr-option-card.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-subtle); }
+.qr-option-icon { width: 48px; height: 48px; border-radius: var(--r-lg); background: var(--accent-subtle); color: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+.qr-option-icon svg { width: 24px; height: 24px; }
+.qr-option-card h2 { font-size: 19px; font-weight: 700; color: var(--text-primary); margin: 0; }
+.qr-option-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0; }
+.qr-option-header { display: flex; align-items: center; justify-content: flex-end; margin-bottom: 4px; }
+.badge-pill { display: inline-flex; align-items: center; padding: 4px 12px; background: var(--accent-subtle); color: var(--accent); border-radius: var(--r-full); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
+.badge-pill.offline { background: var(--success-subtle, #d1fae5); color: var(--success, #059669); }
+.gen-btn { width: 100%; height: 42px; background: var(--gradient-accent); color: white; border: none; border-radius: var(--r-md); font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: var(--transition-base); box-shadow: var(--shadow-accent); }
+.gen-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-accent-lg); }
+.gen-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* QR Preview Section */
+.qr-preview-section { margin-bottom: 48px; }
+.qr-preview-section > h2 { font-size: 20px; font-weight: 800; color: var(--text-primary); margin: 0 0 20px; }
+.qr-preview-card { display: flex; align-items: center; gap: 48px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--r-2xl); padding: 40px; box-shadow: var(--shadow-sm); }
+.qr-preview-box { width: 240px; height: 240px; flex-shrink: 0; background: var(--bg-surface); border: 2px solid var(--border-default); border-radius: var(--r-xl); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.qr-preview-box img, .qr-img { width: 100%; height: 100%; object-fit: contain; }
+.qr-preview-box svg { width: 200px; height: 200px; }
+.qr-preview-info { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.qr-preview-info h3 { font-size: 22px; font-weight: 800; color: var(--text-primary); margin: 0; }
+.qr-preview-info p { font-size: 14px; color: var(--text-secondary); line-height: 1.55; margin: 0; }
+.qr-type-badge { font-size: 13px; font-weight: 700; color: var(--accent); margin: 0; }
+.qr-metadata-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 16px 20px; margin-top: 4px; }
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+.meta-item > span:first-child { font-size: 10px; font-weight: 700; color: var(--text-tertiary); letter-spacing: 0.07em; text-transform: uppercase; }
+.meta-item > span:last-child { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qr-preview-url { font-family: 'Space Grotesk', monospace; font-size: 12px; color: var(--text-secondary); background: var(--bg-elevated); padding: 8px 12px; border-radius: var(--r-sm); border: 1px solid var(--border-subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qr-preview-actions { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.primary-btn { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 22px; border: none; background: var(--gradient-accent); color: white; border-radius: var(--r-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition-base); box-shadow: var(--shadow-accent); }
+.primary-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-accent-lg); }
+.primary-btn svg { width: 16px; height: 16px; }
+.outline-btn { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 22px; border: 1.5px solid var(--border-default); background: var(--bg-surface); color: var(--text-primary); border-radius: var(--r-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition-fast); }
+.outline-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
+.outline-btn svg { width: 16px; height: 16px; }
+
+/* QR metadata grid (scan count / creation date) */
+.qr-type-badge { font-size: 15px; font-weight: 700; color: var(--accent); display: block; margin-bottom: 16px; }
+.qr-metadata-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: var(--bg-elevated); border-radius: var(--r-lg); padding: 20px; margin: 8px 0 20px; }
+.meta-item label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-tertiary); display: block; margin-bottom: 4px; }
+.meta-item span { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+/* QR History / List */
+.qr-list-section { margin-bottom: 40px; }
+.qr-list-section > h2 { font-size: 20px; font-weight: 800; color: var(--text-primary); margin: 0 0 20px; }
+.qr-list-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--r-2xl); overflow: hidden; box-shadow: var(--shadow-sm); }
+.qr-list-item { display: flex; align-items: center; gap: 20px; padding: 20px 28px; border-bottom: 1px solid var(--border-subtle); transition: var(--transition-fast); }
+.qr-list-item:last-child { border-bottom: none; }
+.qr-list-item:hover { background: var(--bg-elevated); }
+.qr-list-thumb { width: 64px; height: 64px; flex-shrink: 0; background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.qr-list-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.qr-list-info { flex: 1; min-width: 0; }
+.qr-list-info h4 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0 0 4px; }
+.qr-list-info p { font-size: 12px; color: var(--text-tertiary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qr-list-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.qr-list-btn { width: 34px; height: 34px; border: 1px solid var(--border-subtle); background: var(--bg-base); border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-secondary); transition: var(--transition-fast); }
+.qr-list-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
+.qr-list-btn svg { width: 15px; height: 15px; }
+
+/* Empty state */
+.qr-empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 80px 40px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--r-2xl); text-align: center; }
+.qr-empty-icon { width: 64px; height: 64px; background: var(--bg-elevated); border-radius: var(--r-xl); display: flex; align-items: center; justify-content: center; color: var(--text-tertiary); }
+.qr-empty-icon svg { width: 32px; height: 32px; }
+.qr-empty-state h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0; }
+.qr-empty-state p { font-size: 14px; color: var(--text-secondary); margin: 0; max-width: 340px; line-height: 1.5; }
+
+@media (max-width: 1024px) { .qr-main { padding: 30px 24px; } .qr-preview-card { gap: 32px; padding: 32px; } }
+@media (max-width: 768px) { .qr-page { flex-direction: column; } .qr-main { padding: 22px 16px 60px; margin-top: 64px; } .qr-header-banner { flex-direction: column; align-items: flex-start; padding: 24px 20px; } .qr-option-grid { grid-template-columns: 1fr; } .qr-preview-card { flex-direction: column; align-items: flex-start; gap: 24px; padding: 24px; } .qr-preview-box { width: 100%; height: 220px; } .qr-preview-actions { width: 100%; } }
+@media (max-width: 480px) { .primary-btn, .outline-btn { flex: 1; justify-content: center; } .qr-list-item { padding: 16px; } }
+
+.qr-message {
+  padding: 12px 16px; border-radius: var(--r-md);
+  font-size: 13.5px; font-weight: 600; margin-bottom: 16px;
+}
+.qr-message.success-message { background: var(--success-subtle); color: var(--success); }
+.qr-message.error-message   { background: var(--danger-subtle);  color: var(--danger); }

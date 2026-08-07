@@ -92,6 +92,15 @@ async function updateUserStatus(req, res, next) {
   }
 }
 
+async function createUser(req, res, next) {
+  try {
+    const user = await adminService.createUser(req.body)
+    res.status(201).json({ success: true, message: 'User created successfully', data: user })
+  } catch (err) {
+    next(err)
+  }
+}
+
 async function createVendor(req, res, next) {
   try {
     const vendor = await vendorService.createVendor(req.body)
@@ -154,6 +163,7 @@ async function deleteVendor(req, res, next) {
 
 module.exports = {
   dashboard,
+  createUser,
   listOrders,
   getOrder,
   updateOrderStatus,

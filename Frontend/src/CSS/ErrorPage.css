@@ -1,0 +1,124 @@
+/* ── ERROR PAGE ── */
+
+.error-page {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: var(--text-primary);
+}
+
+.error-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-2xl);
+  padding: 52px 40px;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.error-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-accent);
+}
+
+.error-badge {
+  width: fit-content;
+  margin: 0 auto 24px;
+  padding: 10px 18px;
+  border-radius: var(--r-full);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.error-card h1 {
+  margin: 0 0 14px;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.error-card p {
+  max-width: 380px;
+  margin: 0 auto 32px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.error-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.error-btn {
+  min-width: 130px;
+  height: 46px;
+  padding: 0 22px;
+  border-radius: var(--r-md);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-base);
+  font-family: inherit;
+}
+
+.error-btn.secondary {
+  border: 1.5px solid var(--border-default);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.error-btn.secondary:hover {
+  border-color: var(--accent-border);
+  color: var(--accent);
+  background: var(--accent-subtle);
+  transform: translateY(-2px);
+}
+
+.error-btn.primary {
+  background: var(--gradient-accent);
+  border: none;
+  color: #ffffff;
+  box-shadow: var(--shadow-accent);
+}
+
+.error-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent-lg);
+}
+
+@media (max-width: 520px) {
+  .error-card { padding: 44px 28px; }
+  .error-card h1 { font-size: 26px; }
+  .error-actions { flex-direction: column; }
+  .error-btn { width: 100%; }
+}

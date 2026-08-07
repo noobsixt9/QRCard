@@ -19,13 +19,15 @@ function getOtpExpiry(minutes = OTP_EXPIRY_MINUTES) {
 }
 
 async function assertSignupCredentialsAvailable({ email, username }) {
-  const existingEmail = await prisma.user.findUnique({ where: { email } })
+  // email is not @unique in the schema — use findFirst
+  const existingEmail = await prisma.user.findFirst({ where: { email } })
   if (existingEmail) {
     const err = new Error('Email already taken')
     err.status = 409
     throw err
   }
 
+  // username IS @unique — findUnique is fine here
   const existingUsername = await prisma.user.findUnique({ where: { username } })
   if (existingUsername) {
     const err = new Error('Username already taken')
@@ -184,7 +186,8 @@ async function verifySignupOtp({ email, otp }) {
       username: pending.username,
       password_hash: pending.password_hash,
       role: 'USER',
-      is_verified: false,
+      is_verified: true,   // OTP was just verified — mark account as confirmed
+      is_active: true,
       profile: { create: {} },
     },
   })
@@ -299,6 +302,64 @@ async function getMe(userId) {
   }
 
   return sanitizeUser(user)
+}
+
+async function sendOTP(email, purpose) {
+  const otp = generateOtp()
+  const expires_at = getOtpExpiry()
+
+  // Delete any previous OTP for this email+purpose before creating a new one
+  await prisma.oTP.deleteMany({ where: { email, purpose } })
+
+  await prisma.oTP.create({
+    data: { email, code: otp, purpose, expires_at },
+  })
+
+  await sendSignupOtpEmail(email, otp, purpose)
+}
+
+async function verifyOTP({ email, code, purpose }) {
+  const record = await prisma.oTP.findFirst({
+    where: { email, purpose },
+    orderBy: { created_at: 'desc' },
+  })
+
+  if (!record) {
+    const err = new Error('No pending verification found for this email')
+    err.status = 400
+    throw err
+  }
+  if (record.expires_at < new Date()) {
+    await prisma.oTP.deleteMany({ where: { email, purpose } })
+    const err = new Error('OTP has expired. Please request a new one.')
+    err.status = 400
+    throw err
+  }
+  if (record.code !== code) {
+    const err = new Error('Invalid OTP code')
+    err.status = 400
+    throw err
+  }
+
+  // Consume the OTP
+  await prisma.oTP.deleteMany({ where: { email, purpose } })
+
+  // For PASSWORD_RESET: generate a short-lived reset_token so the
+  // reset-password endpoint can verify the user without re-sending the OTP
+  if (purpose === 'PASSWORD_RESET') {
+    const crypto = require('crypto')
+    const reset_token = crypto.randomBytes(32).toString('hex')
+    const reset_expires = new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
+
+    await prisma.user.updateMany({
+      where: { email },
+      data: { reset_token, reset_expires },
+    })
+
+    return { reset_token }
+  }
+
+  return record
 }
 
 module.exports = {

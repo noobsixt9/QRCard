@@ -2,10 +2,12 @@ const prisma = require('../../config/db')
 const { parsePagination, paginationMeta } = require('../../utils/pagination')
 
 const VALID_TRANSITIONS = {
-  PENDING: ['CONFIRMED', 'CANCELLED'],
-  CONFIRMED: ['COMPLETED', 'CANCELLED'],
-  COMPLETED: [],
-  CANCELLED: [],
+  PENDING:    ['CONFIRMED', 'CANCELLED'],
+  CONFIRMED:  ['PROCESSING', 'CANCELLED'],
+  PROCESSING: ['DELIVERED'],
+  DELIVERED:  ['COMPLETED'],
+  COMPLETED:  [],
+  CANCELLED:  [],
 }
 
 function canTransition(current, next) {
