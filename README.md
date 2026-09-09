@@ -109,6 +109,10 @@ QRCard bridges the physical and digital networking world. Users sign up, build a
 | express-rate-limit             | AI endpoint rate limiting                     |
 | Zod                            | Request schema validation                     |
 
+
+###Figma Design
+View Figma Design : https://www.figma.com/design/ssPPyvVKw1H0r52zR8BTiG/QRCard-UI-UX-Design?node-id=1-2&t=6AshiuHhGSxup6zg-1
+
 ### Infrastructure
 
 | Service       | Usage                       |
